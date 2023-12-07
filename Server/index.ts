@@ -4,7 +4,7 @@ const port: number = 5000;
 const pools = require("./database");
 const cors = require('cors');
 
-// middleware
+// midkdleware
 app.use(cors);
 
 // routes
@@ -27,5 +27,5 @@ Routes for
 */
 
 app.listen(port, () => {
-    console.log('Example app listening on port ${port}');
+    console.log('Example app listening at port http:/localhost:${port}');
 });
