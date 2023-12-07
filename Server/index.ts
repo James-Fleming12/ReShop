@@ -4,7 +4,7 @@ const port: number = 5000;
 const pools = require("./database");
 const cors = require('cors');
 
-// midkdleware
+// middleware
 app.use(cors);
 
 // routes

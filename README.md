@@ -6,6 +6,7 @@ Necessary Installations to Run:
 2. PostgresQL (server setup)
     - Run the database.sql through the psql command line
 3. `npm run dev` to start the server
+    - The server is started in the client instead of the server (the frontend communicates to the backend)
 
 ## Edits:
 
