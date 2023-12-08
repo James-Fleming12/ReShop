@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS reshop;
 
 CREATE TABLE IF NOT EXISTS user(
     id SERIAL PRIMARY KEY,
+    usercode VARCHAR(6),
     username VARCHAR(50),
     email VARCHAR(50),
 );

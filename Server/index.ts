@@ -1,15 +1,20 @@
+import {Request, Response, response} from 'express';
 const express = require('express');
 const app = express();
 const port: number = 5000;
-const pools = require("./database");
-const cors = require('cors');
+// const pools = require("./database");
+var cors = require('cors');
 
 // middleware
-app.use(cors);
+app.use(cors());
 
 // routes
-app.get('/', (req, res) => {
-    res.send("Hello World");
+app.get('/', (req: Request, res: Response) => {
+    res.json({ message: "Hello from the server! "});
+});
+
+app.get('/other', (req: Request, res: Response) => {
+    res.json({ message: "Other Message?" });
 });
 
 /*
@@ -27,5 +32,5 @@ Routes for
 */
 
 app.listen(port, () => {
-    console.log('Example app listening at port http:/localhost:${port}');
+    console.log(`Server listening at port http:/localhost:${port} (Development Testing)`);
 });
