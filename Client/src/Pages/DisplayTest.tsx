@@ -9,11 +9,11 @@ function DisplayText() {
     console.log(useParams())
 
     return (
-    <>
-        <Navbar />
-        <h1>Display Test for URL Information</h1>
-        <p> {text} </p>
-    </>
+        <>
+            <Navbar />
+            <h1>Display Test for URL Information</h1>
+            <p> {text} </p>
+        </>
     );
 }
 
