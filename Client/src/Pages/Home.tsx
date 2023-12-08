@@ -14,9 +14,8 @@ function Home() {
   return (
     <>
       <Navbar />
-      <h1>ReShop</h1>
+      <h1>ReShop Home</h1>
       <p>{message}</p>
-      <p>What</p>
     </>
   );
 }
