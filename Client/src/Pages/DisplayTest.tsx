@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 function DisplayText() {
 
     const { text } = useParams();
-    console.log(useParams())
 
     return (
         <>
