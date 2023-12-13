@@ -2,7 +2,6 @@ import {Request, Response, response} from 'express';
 const express = require('express');
 const app = express();
 const port: number = 5000;
-// const pools = require("./database");
 var cors = require('cors');
 
 // middleware
