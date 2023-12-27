@@ -1,8 +1,9 @@
 ## Server Setup:
 
 **Current Stack**:
-PERN (PostgresQL, Express, React, Node), incorporating Vite and Sass
-    - Once prototyping is complete, development on Svelte frontend and Bun backend replacements begin
+Frontend: Astro (New), React (Old)
+Backend: ExpressJS, NodeJS
+Cloud: AWS, Cognito, RDS (Postgres)
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
