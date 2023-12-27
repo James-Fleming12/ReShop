@@ -14,6 +14,11 @@ Necessary Installations to Run:
     - The server is technically in the client
     - The client interacts with the server separately (REST API)
 
+## TODO:
+1. Transfer Frontend Client to AstroJS
+2. Figure out Astro interaction with Express REST API
+    - Decide if Express is the desired framework
+
 ## Making Edits:
 1. Client:
     - New Components/Pages can be added anywhere as long as they are exported
