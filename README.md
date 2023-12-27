@@ -1,7 +1,7 @@
 ## Server Setup:
 
 **Current Stack**:
-Frontend: Astro (New), React (Old)
+Frontend: Astro (New), React (Old), SCSS
 Backend: ExpressJS, NodeJS
 Cloud: AWS, Cognito, RDS (Postgres)
 
