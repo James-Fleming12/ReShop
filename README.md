@@ -3,7 +3,8 @@
 **Current Stack**:
 Frontend: Astro (New), React (Old), SCSS
 Backend: ExpressJS, NodeJS
-Cloud: AWS, Cognito, RDS (Postgres)
+Cloud (rn): AWS, Cognito, RDS (Postgres), SST
+Testing: Storybook (Frontend), Jest(Backend)
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
@@ -16,9 +17,8 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-1. Transfer Frontend Client to AstroJS
-2. Figure out Astro interaction with Express REST API
-    - Decide if Express is the desired framework
+1. Figure out Astro interaction with Express REST API
+2. Include Storybook and Jest (testing)
 
 ## Making Edits:
 1. Client:
