@@ -1,0 +1,17 @@
+---
+const urls = [
+    {url: '/', name: 'Home'},
+    {url: '/test', name: 'Test'},
+]
+---
+<ul>
+    { urls.map((url) => <li><a href={url.url}>{url.name}</a></li>) }
+</ul>
+
+<style>
+    ul{
+        background-color: gray;
+        margin: 0;
+        padding: 0;
+    }
+</style>

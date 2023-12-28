@@ -2,17 +2,16 @@
 
 **Current Stack**:
 Frontend: Astro (New), React (Old), SCSS
-Backend: ExpressJS, NodeJS
-Cloud (rn): AWS, Cognito, RDS (Postgres), SST
+Backend: ExpressJS, NodeJS, Prisma
 Testing: Storybook (Frontend), Jest(Backend)
+Server:
+    - Cloud: AWS, Cognito, S3 Bucket, RDS (Postgres, maybe ElastiCache), SST (management)
+    - NYU: PostgresQL (with BLOBs for images), SuperTokens (or another authentication service)
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
     - Run `npm i` for each package.json (in client, in server)
-2. PostgresQL (database server setup)
-    - Create a `.env` file that holds the URL to the database, in the format of 
-    - `DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"`
-3. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server
+3. `npm start` to start the client server, `nodemon index.ts` to start the backend server
     - The server is technically in the client
     - The client interacts with the server separately (REST API)
 
@@ -29,3 +28,8 @@ Necessary Installations to Run:
     - Routes can be added to `index.ts`, with the return type usually being a json or a login
 3. Database:
     - Any changes to the database schema are made in `schema.prisma`
+
+## AWS Connections:
+1. RDS
+    - Endpoint: database-1.cbgaoumoqwlt.us-east-2.rds.amazonaws.com
+    - Port: 5432

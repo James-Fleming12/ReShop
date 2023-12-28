@@ -1,0 +1,24 @@
+---
+let data;
+try {
+    data = await fetch('http:/localhost:5000').then((response) =>
+        response.json()
+    );
+} catch (e) {
+    console.log("Server Down");
+    data = {
+        message: "Error: Server Down",
+    };
+}
+---
+
+<h1>API Test: {data.message}</h1>
+
+<style lang="scss">
+    h1{
+        color:rgb(255, 22, 22);
+        &:hover{
+            color:blue;
+        }
+    }
+</style>

@@ -1,14 +1,19 @@
 ---
 import CommonHead from '../components/CommonHead.astro';
+import NavBar from '../components/NavBar.astro';
+import TestFetch from '../components/TestFetch.astro';
 ---
 
-<CommonHead/>
+<CommonHead title = "Home"/>
 <body>
+	<NavBar />
 	<h1>Test App</h1>
+	<TestFetch />
 </body>
 
 <style lang="scss">
-	* {
+	body{
+		background-color: aliceblue;
 		padding:0;
 		margin:0;
 	}

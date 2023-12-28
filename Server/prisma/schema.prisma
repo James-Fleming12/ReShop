@@ -10,4 +10,12 @@ datasource db {
 model user{
   id        Int @id @default(dbgenerated())
   username  String @unique
+  name      String
+  address   String
+  bio       String?
+}
+
+model Post{
+  id        Int @id
+  title     String
 }

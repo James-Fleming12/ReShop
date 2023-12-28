@@ -1,7 +1,13 @@
 import {Request, Response, response} from 'express';
+import { CognitoIdentityServiceProvider } from 'aws-sdk';
+
 const express = require('express');
 const app = express();
 const port: number = 5000;
+
+const clientID: string = "7858be9f71vc72slic9ma3t1os"; // use when making
+var cognito = new CognitoIdentityServiceProvider();
+
 var cors = require('cors');
 
 // middleware
@@ -14,6 +20,10 @@ app.get('/', (req: Request, res: Response) => {
 
 app.get('/other', (req: Request, res: Response) => {
     res.json({ message: "Other Message?" });
+});
+
+app.post('/signup', (req: Request, res: Response) => {
+    
 });
 
 /*
