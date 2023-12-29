@@ -23,7 +23,8 @@ app.get('/other', (req: Request, res: Response) => {
 });
 
 app.post('/signup', (req: Request, res: Response) => {
-    
+    // implement later (aws cognito or supertokens)
+    // a copy of the user placed in the database
 });
 
 /*
