@@ -11,7 +11,7 @@ Backend: ExpressJS, NodeJS, Prisma
 Testing: Storybook (Frontend), Jest (Backend)
 Server:
     - Cloud: AWS, Cognito, S3 Bucket, RDS (Postgres, maybe ElastiCache), SST (management)
-    - NYU: PostgresQL (with BLOBs for images), SuperTokens (or another authentication service)
+    - NYU: PostgresQL (BLOBs images, PostGIS), SuperTokens (or another authentication service)
 Prodcution: Kubernetes, Consul?
 Mobile: Kotlin, Swift
 
