@@ -1,6 +1,11 @@
 ## Server Setup:
 
 **Current Stack**:
+Microservice Oriented Architecture
+    - A microservice for the web client, both mobile clients, and the backend API
+Connections only need to be made between the backend API and the clients 
+    - No inter-client communication
+
 Frontend: Astro (New), React (Old), SCSS
 Backend: ExpressJS, NodeJS, Prisma
 Testing: Storybook (Frontend), Jest (Backend)
@@ -8,6 +13,7 @@ Server:
     - Cloud: AWS, Cognito, S3 Bucket, RDS (Postgres, maybe ElastiCache), SST (management)
     - NYU: PostgresQL (with BLOBs for images), SuperTokens (or another authentication service)
 Prodcution: Kubernetes, Consul?
+Mobile: Kotlin, Swift
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
