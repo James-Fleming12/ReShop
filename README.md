@@ -8,7 +8,7 @@ Connections only need to be made between the backend API and the clients
 
 Frontend: Astro (New), React (Old), SCSS
 Backend: ExpressJS, NodeJS, Prisma
-Testing: Storybook (Frontend), Jest (Backend)
+Testing: Storybook (Frontend), Jest (Unit), Cypress (End to End)
 Server:
     - Cloud: AWS, Cognito, S3 Bucket, RDS (Postgres, maybe ElastiCache), SST (management)
     - NYU: PostgresQL (BLOBs images, PostGIS), SuperTokens (or another authentication service)
