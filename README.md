@@ -6,37 +6,37 @@ Microservice Oriented Architecture
 Connections only need to be made between the backend API and the clients 
     - No inter-client communication
 
-Frontend: Astro (New), React (Old), SCSS
+Frontend: Astro, Svelte (interactivity), Vercel (adapter)
 Backend: ExpressJS, NodeJS, Prisma
 Testing: Storybook (Frontend), Jest (Unit), Cypress (End to End)
-Server:
-    - Cloud: AWS, Cognito, S3 Bucket, RDS (Postgres, maybe ElastiCache), SST (management)
-    - NYU: PostgresQL (BLOBs images, PostGIS), SuperTokens (or another authentication service)
-Prodcution: Kubernetes, Consul?
+Database: PostgresQL (BLOBs for images), bcrypt (hashing)
+Prodcution: Kubernetes, Consul
 Mobile: Kotlin, Swift
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
     - Run `npm i` for each package.json (in client, in server)
+2. Postgres Database (connected to the Prisma client)
+    - In a `.env` file that holds a variable `DATABASE_URL`
+    - In the format of `postgresql://username:password@url:port/dbname?schema=public`
 3. `npm start` to start the client server, `nodemon index.ts` to start the backend server
     - The server is technically in the client
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-1. Figure out Astro interaction with Express REST API
-2. Include Storybook and Jest (testing)
+1. Validation doesn't work because the token passed through the HTTP isn't a string (and can't be toStringed)
+2. Finish Cookie integration for user authentication (both login cookie (longer duration) and username cookie (session duration))
+7. Include Storybook and Jest (testing)
 
 ## Making Edits:
 1. Client:
-    - New Components/Pages can be added anywhere as long as they are exported
-    - New pages/urls are added to `App.tsx` with the react-router
+    - New Components are added to the `components` directory
+    - Astro has file-based routing, so any files added to `pages` will create a new route
 2. Server:
     - The server acts as the REST API of the website
     - Routes can be added to `index.ts`, with the return type usually being a json or a login
 3. Database:
     - Any changes to the database schema are made in `schema.prisma`
-
-## AWS Connections:
-1. RDS
-    - Endpoint: database-1.cbgaoumoqwlt.us-east-2.rds.amazonaws.com
-    - Port: 5432
+    - Migrated with `npx prisma migrate` and pushed with `npx prisma db push`
+4. Mobile:
+    - Yet to be developed

@@ -1,0 +1,23 @@
+---
+import CommonHead from "../components/CommonHead.astro";
+console.log("page visited");
+---
+
+<CommonHead title = "LogIn"/>
+<body>
+    <h1>Register</h1>
+    <form action="api/auth/register" method="POST">
+        <input type="text" placeholder="Email" name="email" id="email">
+        <input type="text" placeholder="Username" name="username" id="username">
+        <input type="password" placeholder="Password" name="password" id="password">
+        <input type="password" placeholder="Confirm Password" name="confirmation" id="confirmation">
+        <button type="submit">Submit</button>
+    </form>
+    <p>Already have an account <a href="/signin">Sign In</a></p>
+</body>
+
+<style>
+    body{
+        background-color:
+    }
+</style>

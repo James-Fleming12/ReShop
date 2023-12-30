@@ -1,0 +1,20 @@
+---
+import CommonHead from "../components/CommonHead.astro";
+---
+
+<CommonHead title = "LogIn"/>
+<body>
+    <h1>SignIn</h1>
+    <form action="api/auth/signin" method="POST">
+        <input type="text" placeholder="Email" name="email" id="email">
+        <input type="password" placeholder="Password" name="password" id="password">
+        <button type="submit"></button>
+    </form>
+    <p>Dont have an account? <a href="/register">Register</a></p>
+</body>
+
+<style>
+    button{
+        padding:10px;
+    }
+</style>

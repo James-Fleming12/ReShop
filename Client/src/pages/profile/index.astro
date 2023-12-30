@@ -1,0 +1,32 @@
+---
+import CommonHead from '../../components/CommonHead.astro';
+import NavBar from '../../components/NavBar.astro';
+let username: String | undefined = "";
+const check = Astro.cookies.get("username")?.toString();
+if(check){
+    username = check;
+}else{
+    const response = await fetch("http://localhost:5000/validate", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            token: Astro.cookies.get("jwt-token"),
+        }),
+    });
+    if(!response || !response.ok){
+        return redirect("/signin");
+    }
+    const jsonRes = await response.json();
+    Astro.cookies.set("username", jsonRes.user);
+    return new Response("Finished", { status: 200 });
+}
+---
+<CommonHead />
+<body>
+    <NavBar />
+    <h1>{username}'s Profile</h1>
+</body>
