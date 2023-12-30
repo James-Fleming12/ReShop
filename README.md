@@ -24,8 +24,7 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-1. Validation doesn't work because the token passed through the HTTP isn't a string (and can't be toStringed)
-2. Finish Cookie integration for user authentication (both login cookie (longer duration) and username cookie (session duration))
+
 7. Include Storybook and Jest (testing)
 
 ## Making Edits:

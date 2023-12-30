@@ -4,7 +4,6 @@ export const POST: APIRoute = async({ request, cookies, redirect }) => {
     const formData = await request.formData();
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
-    console.log(formData);
     if(!email || !password) {
         return new Response("Email and password are required", { status: 400 });
     }
@@ -30,6 +29,7 @@ export const POST: APIRoute = async({ request, cookies, redirect }) => {
                 path: "/",
                 secure: true,
                 sameSite: "strict",
+                maxAge: 1200000,
             });
         }else{
             return new Response("Invalid Credential", { status: 400 });

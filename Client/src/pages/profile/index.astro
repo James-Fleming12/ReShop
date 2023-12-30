@@ -1,32 +1,30 @@
 ---
 import CommonHead from '../../components/CommonHead.astro';
 import NavBar from '../../components/NavBar.astro';
-let username: String | undefined = "";
-const check = Astro.cookies.get("username")?.toString();
+import { checklogin } from '../_utils';
+let username: string | undefined = ""
+const token = Astro.cookies.get('jwt-token');
+const check = Astro.cookies.get("username");
+if(!token){
+    return Astro.redirect('signin');
+}
 if(check){
-    username = check;
+    username = check.value;
 }else{
-    const response = await fetch("http://localhost:5000/validate", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            token: Astro.cookies.get("jwt-token"),
-        }),
-    });
-    if(!response || !response.ok){
-        return redirect("/signin");
+    let { usernamec } = await checklogin(token.value);
+    if(usernamec){
+        username = usernamec.toString();
+        Astro.cookies.set("username", username);
+    }else{
+        Astro.redirect('signin');
     }
-    const jsonRes = await response.json();
-    Astro.cookies.set("username", jsonRes.user);
-    return new Response("Finished", { status: 200 });
 }
 ---
 <CommonHead />
 <body>
     <NavBar />
     <h1>{username}'s Profile</h1>
+    <form action="/api/auth/signout">
+        <button type="submit">SignOut</button>
+    </form>
 </body>
