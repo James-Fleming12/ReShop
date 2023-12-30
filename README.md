@@ -24,7 +24,8 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-
+2. Nodemailer within Client that sends a request to the API to store a link to reset password
+    - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
 7. Include Storybook and Jest (testing)
 
 ## Making Edits:
