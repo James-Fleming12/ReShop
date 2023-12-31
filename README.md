@@ -26,6 +26,7 @@ Necessary Installations to Run:
 ## TODO:
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
+6. Check if spaces can be added to form info to mess with database
 7. Include Cypress and Jest (testing)
 8. Include botting protection for registration and logging in
 
