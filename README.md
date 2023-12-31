@@ -27,6 +27,7 @@ Necessary Installations to Run:
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
 7. Include Storybook and Jest (testing)
+8. Include botting protection for registration and logging in
 
 ## Making Edits:
 1. Client:
@@ -34,7 +35,7 @@ Necessary Installations to Run:
     - Astro has file-based routing, so any files added to `pages` will create a new route
 2. Server:
     - The server acts as the REST API of the website
-    - Routes can be added to `index.ts`, with the return type usually being a json or a login
+    - New groups of routes are added to `routes` and mentioned/added to the main router in `startup/routes.ts`
 3. Database:
     - Any changes to the database schema are made in `schema.prisma`
     - Migrated with `npx prisma migrate` and pushed with `npx prisma db push`

@@ -1,7 +1,8 @@
 ---
-import CommonHead from '../../components/CommonHead.astro';
-import NavBar from '../../components/NavBar.astro';
+import CommonHead from '../../components/Unreactive/CommonHead.astro';
+import NavBar from '../../components/Unreactive/NavBar.astro';
 import { checklogin } from '../_utils';
+
 let username: string | undefined = ""
 const token = Astro.cookies.get('jwt-token');
 const check = Astro.cookies.get("username");

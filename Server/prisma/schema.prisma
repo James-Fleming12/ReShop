@@ -15,8 +15,8 @@ model region{
 model user{
   id        Int     @id @default(autoincrement())
   email     String  @unique @db.VarChar(50)
-  username  String  @unique
-  password  String  @db.VarChar(100)
+  username  String  @unique @db.VarChar(50)
+  password  String  @db.VarChar(50)
   tokenc    String  // Used to generate tokens so that users can nullify their cookies (log everyone out)
   name      String? @db.VarChar(25)
   region    String?

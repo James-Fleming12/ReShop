@@ -1,16 +1,13 @@
 ---
-import CommonHead from "../components/CommonHead.astro";
+import CommonHead from "../components/Unreactive/CommonHead.astro";
+import LoginForm from "../components/Reactive/loginForm.svelte";
 ---
 
 <CommonHead title = "LogIn"/>
 <body>
     <h1>SignIn</h1>
-    <form action="api/auth/signin" method="POST">
-        <input type="text" placeholder="Email" name="email" id="email">
-        <input type="password" placeholder="Password" name="password" id="password">
-        <button type="submit"></button>
-    </form>
-    <p>Dont have an account? <a href="/register">Register</a></p>
+    <LoginForm client:load />
+    <p>Dont have an account? <a href="/register">Create one</a></p>
 </body>
 
 <style>
