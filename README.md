@@ -8,7 +8,7 @@ Connections only need to be made between the backend API and the clients
 
 Frontend: Astro, Svelte (interactivity), Vercel (adapter)
 Backend: ExpressJS, NodeJS, Prisma
-Testing: Storybook (Frontend), Jest (Unit), Cypress (End to End)
+Testing: Jest (Unit), Cypress (End to End)
 Database: PostgresQL (BLOBs for images), bcrypt (hashing)
 Prodcution: Kubernetes, Consul
 Mobile: Kotlin, Swift
@@ -26,7 +26,7 @@ Necessary Installations to Run:
 ## TODO:
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
-7. Include Storybook and Jest (testing)
+7. Include Cypress and Jest (testing)
 8. Include botting protection for registration and logging in
 
 ## Making Edits:
@@ -41,3 +41,10 @@ Necessary Installations to Run:
     - Migrated with `npx prisma migrate` and pushed with `npx prisma db push`
 4. Mobile:
     - Yet to be developed
+
+## Testing:
+1. Cypress (End to End, contained in Client):
+    - `npx cypress open` will open up the interface
+    - `npx cypress run` will run all test cases (defined in `cypress/e2e`)
+2. Jest (Unit, contained in Server):
+    - `npm jest` will run all test cases (defined in `tests`)
