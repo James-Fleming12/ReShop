@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const AWS = require('aws-sdk');
 
 const express = require('express');
 const router = express.Router();
@@ -58,7 +59,7 @@ router.post('/register', async (req: Request, res: Response) => {
     let valid: boolean = false;
     let tokeng: string = "";
     while(!valid){
-        tokeng = crypto.randomBytes(15).toString('hex');
+        tokeng = await crypto.randomBytes(15).toString('hex');
         const tokencheck = await prisma.user.findFirst({
             where: {
                 tokenc: tokeng

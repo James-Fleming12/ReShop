@@ -8,10 +8,14 @@ Connections only need to be made between the backend API and the clients
 
 Frontend: Astro, Svelte (interactivity), Vercel (adapter)
 Backend: ExpressJS, NodeJS, Prisma
+Database: PostgresQL, AWS S3 (Images), bcrypt (hashing)
 Testing: Jest (Unit), Cypress (End to End)
-Database: PostgresQL (BLOBs for images), bcrypt (hashing)
 Prodcution: Kubernetes, Consul
 Mobile: Kotlin, Swift
+
+**After Prototype**:
+Backend API -> Either Bun, Hono, Prisma or Gin, GORM 
+    - Improved runtime for larger request loads
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
@@ -24,6 +28,8 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
+1. Finish Photo Uploads (and test)
+2. Finish basic user implementation (names, bios, pfps, etc.)
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
 6. Check if spaces can be added to form info to mess with database

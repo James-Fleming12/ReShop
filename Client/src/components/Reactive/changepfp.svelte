@@ -1,11 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
-    let user;
-    onMount( async() => {
-        const response = await fetch(process.env.API_URL + "/user/")
-    });
-
     let responseMessage: string;
     async function submit(e: SubmitEvent){
         e.preventDefault();

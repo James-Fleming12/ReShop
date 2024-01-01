@@ -1,6 +1,9 @@
 ---
 import CommonHead from "../components/Unreactive/CommonHead.astro";
 import RegisForm from "../components/Reactive/regisForm.svelte";
+
+const token = Astro.cookies.get('jwt-token');
+if(token) return Astro.redirect("/");
 ---
 
 <CommonHead title = "Register"/>
@@ -12,6 +15,6 @@ import RegisForm from "../components/Reactive/regisForm.svelte";
 
 <style>
     body{
-        background-color:
+        background-color: white;
     }
 </style>

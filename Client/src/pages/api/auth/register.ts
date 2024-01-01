@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async({ request, redirect }) => {
     const formData = await request.formData();
+    if (!formData) return new Response (JSON.stringify({ message: "Invalid Form" }), { status: 400 });
     let email = formData.get("email");
     let username = formData.get("username");
     let password = formData.get("password");
