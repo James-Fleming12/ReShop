@@ -14,12 +14,12 @@ model region{
 
 model user{
   id        Int     @id @default(autoincrement())
-  email     String  @unique @db.VarChar(50)
-  username  String  @unique @db.VarChar(50)
-  password  String  @db.VarChar(50)
+  email     String  @unique
+  username  String  @unique 
+  password  String  
   tokenc    String  // Used to generate tokens so that users can nullify their cookies (log everyone out)
   pfp       String  @default("defaultpfp") // link to the profile picture saved in S3
-  name      String? @db.VarChar(50)
+  name      String? 
   region    String?
   bio       String?
 }

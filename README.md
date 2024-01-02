@@ -28,11 +28,11 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-1. Finish Photo Uploads (and test)
-2. Finish basic user implementation (names, bios, pfps, etc.)
+1. Finish up last parts of image uploads (Astro API)
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
-6. Check if spaces can be added to form info to mess with database
+5. Check to see if image authentication has any safer methods (or if it even needs safer methods)
+6. Check if spaces can be added to form info to mess with database (if trims are needed)
 7. Include Cypress and Jest (testing)
 8. Include botting protection for registration and logging in
 

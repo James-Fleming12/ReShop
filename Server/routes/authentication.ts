@@ -5,13 +5,11 @@ const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const AWS = require('aws-sdk');
 
 const express = require('express');
 const router = express.Router();
 
 router.post('/validate', async (req: Request, res: Response) => {
-    console.log("called");
     const { token } = req.body;
     const mytoken = token.toString().trim().replace('Bearer ', '');
     const decoded = jwt.decode(mytoken, process.env.JWT_SECRET)
@@ -69,6 +67,7 @@ router.post('/register', async (req: Request, res: Response) => {
             valid = true;
         }
     }
+    
     const created = await prisma.user.create({
         data: {
             email: email,

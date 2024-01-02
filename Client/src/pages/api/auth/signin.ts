@@ -38,7 +38,6 @@ export const POST: APIRoute = async({ request, cookies, redirect }) => {
         });
 
         if(response.ok){
-            console.log("breaks here");
             const jsonRes = await response.json();
             const token = jsonRes.token;
             cookies.set("jwt-token", token, {

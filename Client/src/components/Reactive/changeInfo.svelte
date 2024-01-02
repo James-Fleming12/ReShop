@@ -1,21 +1,21 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
-    let user;
-    onMount( async() => {
-        const response = await fetch(process.env.API_URL + "/user/")
-    });
+    export let name: string;
+    export let userBio: string;
 
     let responseMessage: string;
     async function submit(e: SubmitEvent){
         e.preventDefault();
         const formData = new FormData(e.currentTarget as HTMLFormElement);
-        const response = await fetch("", {
+        const response = await fetch("/api/manage/user", {
             method: "POST",
             body: formData,
-        });
-        const data = await response.json();
-        responseMessage = data.message;
+        }).catch(() => null);
+        if (!response){
+            responseMessage = "API Error";
+        }else{
+            const data = await response.json().catch(() => { message: "Error" });
+            responseMessage = data.message;
+        }
     }
 </script>
 
@@ -32,7 +32,11 @@
 <form on:submit={submit}>
     <label>
         Name
-        <input type="text" id="email" name="email" required/>
+        <input type="text" id="name" name="name" placeholder="{name}"/>
+    </label>
+    <label>
+        Bio
+        <textarea id="bio" name="bio" placeholder="{userBio}"></textarea>
     </label>
     <button type="submit">Submit</button>
     {#if responseMessage}

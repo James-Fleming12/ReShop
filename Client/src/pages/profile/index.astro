@@ -1,18 +1,21 @@
 ---
 import CommonHead from '../../components/Unreactive/CommonHead.astro';
 import NavBar from '../../components/Unreactive/NavBar.astro';
+import ChangeInfo from '../../components/Reactive/changeInfo.svelte';
+import Changepfp from '../../components/Reactive/changepfp.svelte';
 import { checklogin } from '../_utils';
 
-let username: string | undefined = ""
+let username: string | undefined = "";
 const token = Astro.cookies.get('jwt-token');
 const check = Astro.cookies.get("username");
+
 if(!token){
     return Astro.redirect('signin');
 }
 if(check){
     username = check.value;
 }else{
-    let { usernamec } = await checklogin(token.value);
+    const { usernamec } = await checklogin(token.value);
     if(usernamec){
         username = usernamec.toString();
         Astro.cookies.set("username", username);
@@ -20,11 +23,24 @@ if(check){
         Astro.redirect('signin');
     }
 }
+let bio: string = "";
+let name: string = "";
+let working = true;
+const response = await fetch(import.meta.env.API_URL + "/user/get/" + check?.value).catch(() => null);
+if (!response || !response.ok) {
+    working = false;
+} else {
+    const data = await response.json();
+    bio = data.user.bio ? data.user.bio : "";
+    name = data.user.name ? data.user.name : "";
+}
 ---
-<CommonHead />
+<CommonHead title="Your Profile"/>
 <body>
     <NavBar />
     <h1>{username}'s Profile</h1>
+    <Changepfp client:load/>
+    { working ? <ChangeInfo client:load userBio={bio} name={name} /> : <p>Server Error</p> }
     <form action="/api/auth/signout">
         <button type="submit">SignOut</button>
     </form>

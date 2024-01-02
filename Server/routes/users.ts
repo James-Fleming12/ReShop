@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const prisma = new PrismaClient();
 
-interface FileRequest extends Request {
-    files: any;
+interface FileRequest extends Request { 
+    files: any; // solely for typescript linting
 }
 
 const express = require('express');
@@ -13,81 +15,92 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
-const { S3CLient, PutObjectCommand } = require('@aws-sdk/client-s3');
-
 const s3Config = {
-    accessKeyId: process.env.AWS_ACCESS,
-    secretAccessKey: process.env.AWS_SECRET,
-    region: process.env.AWS_REGION,
+    region: process.env.AWS_REGION!,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS!,
+        secretAccessKey: process.env.AWS_SECRET!,
+    }
 };
+const client = new S3Client(s3Config);
 
-const s3 = new S3CLient(s3Config);
+const allowed_files = ['image/png', 'image/jpeg', 'image/jpg']; // check these later
 
-// returns a presigned url for the image
+// takes in a username in the params of the link
+// returns a presigned url to the image (with a lifetime of 2000 milliseconds?)
 router.get('/pfp/:username', async (req: Request, res: Response) => {
-    let message = "";
-    const username = req.params.username;
     const user = await prisma.user.findFirst({
         where: {
-            username: username,
+            username: req.params.username,
         }
-    }).catch(() => { message = "Database Error"; return null });
-    if (!user) return res.status(409).json(!message ? { message: "Invalid Username" } : {message: "Database Error"});
-    const pfpCode = user.pfp;
-    const url = s3.getSignedUrl('getObject', {
+    }).catch((e) => {
+        console.log(e);
+        return null;
+    });
+    if (!user) return res.status(409).json({ message: "Invalid Input" });
+    const filename = user.pfp;
+    const presigned = await getSignedUrl(client, new GetObjectCommand({ 
         Bucket: process.env.AWS_BUCKET_NAME,
-        Key: pfpCode,
-        Expires: 60*5,
-    }).catch((e) => { console.log(e); return null });
-    if (!url) return res.status(404).json({ message: "AWS Server Error" });
-    return res.status(200).json({ image: url });
+        Key: filename,
+    }), { expiresIn: 2000 }).catch((e) => {
+        console.log(e);
+        return null;
+    });
+    if (!presigned) return res.status(500).json({ message: "AWS Server Error" });
+    return res.status(200).json({ url: presigned });
 });
 
-// takes in an image input
 router.post('/pfp/:username', async (req: FileRequest, res: Response) => {
-    // add image checks for file extension type and file size (10 mb or more not permitted)
-    const file = req.files.file;
-    if (!file) return res.status(409).json({ message: "Invalid Form" });
-    const username = req.params.username;
-    if (!username || username.length < 1) return res.status(409).json({ message: "Invalid Username" });
-    const filename = crypto.randomBytes(15).toString('hex');
-    if (!filename) return res.status(409).json({ message: "Server Error" });
-    let prismaerror = false
-    const user = prisma.user.findFirst({
+    const file = req.files.image;
+
+    // check if its an image (either magic file signatures, mime types, or being lazy and checking name)
+    if (!allowed_files.includes(file.mimetype)) return res.status(409).json({ message: "Invalid File Type" });
+
+    // size is given in kbs
+    if (file.size > 200000) return res.status(409).json({ message: "Image Too Large" });
+
+    if (!file) return res.status(409).json({ message: "Invalid File" });
+    const user = await prisma.user.findFirst({
         where: {
-            username: username,
+            username: req.params.username,
         }
-    }).catch((e) => { prismaerror = true; return null })
-    if (!user) return prismaerror ? res.status(404).json({message: "Server Error"}) : res.status(409).json({message: "Invalid Username"});
-    const updated = prisma.user.update({
+    }).catch(() => null);
+    console.log(req.params.username);
+    if (!user) return res.status(409).json({ message: "Invalid Input" });
+
+    if (user.pfp !== "defaultpfp"){ // deleting old images
+        const deleted = await client.send(new DeleteObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: user.pfp,
+        })).catch((e) => {
+            console.log(e);
+            return null;
+        });
+        if (!deleted) return res.status(404).json({ message: "AWS Server Error" });
+    }
+    const generated = user.username + "-" + crypto.randomBytes(5).toString('hex');
+    const response = await client.send(new PutObjectCommand({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: generated,
+        Body: file.data,
+    })).catch((e) => {
+        console.log(e);
+        return null;
+    });
+    if (!response) return res.status(404).json({ message: "AWS Server Error" });
+    const updated = await prisma.user.update({
         where: {
-            username: username,
-        }, 
+            username: user.username,
+        },
         data: {
-            pfp: filename,
+            pfp: generated,
         }
     }).catch(() => null);
     if (!updated) return res.status(404).json({ message: "Database Server Error" });
-    const data = await s3.send(new PutObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: filename,
-        Body: file.data,
-    })).catch(() => null);
-    if(!data) {
-        const updated = prisma.user.update({
-            where: {
-                username: username,
-            }, 
-            data: {
-                pfp: "defaultpfp",
-            }
-        }).catch(() => null);
-        if (!updated) return res.status(404).json({ message: "AWS and Database Server Down" });
-        return res.status(404).json({ message: "AWS Server Error. Profile Picture Reverted" });
-    }
-    return res.status(200).json({ message: "Profile Picture Changed" });
+    return res.status(200).json({ message: "Profile Picture Updated" });
 });
 
+// returns the user object for the URL parameterized username
 router.get('/get/:username', async (req: Request, res: Response) => {
     const username = req.params.username;
     if (!username || username.length > 50) return res.status(409).json({ message: "Invalid Input" });
@@ -102,7 +115,7 @@ router.get('/get/:username', async (req: Request, res: Response) => {
 
 // Receives an HTTP request to the link with the old username
 // the HTTP body will hold the new username and the user's password
-router.post('/change/username/:username', async (req: Request, res: Response) => {
+router.post('/changeusername/:username', async (req: Request, res: Response) => {
     const username = req.params.username;
     const formData = await req.body.json();
     if (!formData) return res.status(409).json({ message: "Invalid Form" });
@@ -126,15 +139,11 @@ router.post('/change/username/:username', async (req: Request, res: Response) =>
     return res.status(200).json({ message: "Username Changed" });
 });
 
-router.post('/change/info/:username', async (req: Request, res: Response) => {
+router.post('/changeinfo/:username', async (req: Request, res: Response) => {
     const username = req.params.username;
-    const formData = await req.body.json();
-    if (!formData) return res.status(409).json({ message: "Invalid Form" });
-    const newname = formData.username;
-    const bio = formData.bio;
-    const token = formData.token;
-    if (!token) return res.status(409).json({ message: "Invalid Form Information" });
-    if (!newname && !bio) return res.status(409).json({ message: "No Updates to be Made" });
+    const { name, bio, token } = req.body;
+    if (!token) return res.status(409).json({ message: "Invalid Token" });
+    if (!name && !bio) return res.status(409).json({ message: "No Updates to be Made" });
     const user = await prisma.user.findFirst({
         where: {
             username: username
@@ -147,7 +156,7 @@ router.post('/change/info/:username', async (req: Request, res: Response) => {
         bio: user.bio,
     }
     if (bio) dict.bio = bio;
-    if (newname) dict.name = newname;
+    if (name) dict.name = name;
     const updated = await prisma.user.update({
         where: {
             username: username,

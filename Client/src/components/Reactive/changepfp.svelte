@@ -1,14 +1,20 @@
 <script lang="ts">
     let responseMessage: string;
-    async function submit(e: SubmitEvent){
+    async function submit2(e: SubmitEvent){
         e.preventDefault();
         const formData = new FormData(e.currentTarget as HTMLFormElement);
-        const response = await fetch("", {
+        const response = await fetch("/api/manage/pfp", {
             method: "POST",
             body: formData,
+        }).catch((e) =>{
+            return null;
         });
-        const data = await response.json();
-        responseMessage = data.message;
+        if (!response) {
+            responseMessage = "Server Error";
+        }else{
+            let data = await response.json().catch(() => { message: "Error" });
+            responseMessage = data.message;
+        }
     }
 </script>
 
@@ -22,11 +28,8 @@
     }
 </style>
 
-<form on:submit={submit}>
-    <label>
-        Name
-        <input type="text" id="email" name="email" required/>
-    </label>
+<form on:submit={submit2} enctype="multipart/form-data">
+    <input type="file" id="image" name="image" accept="image/*" required/>
     <button type="submit">Submit</button>
     {#if responseMessage}
         <p class="warning">{responseMessage}</p>
