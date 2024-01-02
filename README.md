@@ -23,7 +23,11 @@ Necessary Installations to Run:
 2. Postgres Database (connected to the Prisma client)
     - In a `.env` file that holds a variable `DATABASE_URL`
     - In the format of `postgresql://username:password@url:port/dbname?schema=public`
-3. `npm start` to start the client server, `nodemon index.ts` to start the backend server
+3. Set up `.env` files
+    - In both Client and Server
+    - Client: API_URL
+    - Server: DATABASE_URL, JWT_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
+4. `npm start` to start the client server, `nodemon index.ts` to start the backend server
     - The server is technically in the client
     - The client interacts with the server separately (REST API)
 
