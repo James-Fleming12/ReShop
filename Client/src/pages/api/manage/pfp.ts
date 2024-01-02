@@ -14,7 +14,7 @@ export const POST: APIRoute = async({ request, cookies }) => {
     if (!cookies.get("username")) return new Response(JSON.stringify({ message: "Invalid Information" }), { status: 409 });
 
     // might want to send the token too to add extra security to the Profile Picture
-    const response = await fetch("http://localhost:5000/user/pfp/" + cookies.get("username").value, {
+    const response = await fetch("http://localhost:5000/user/pfp/" + cookies.get("username")!.value, {
         method: "POST",
         mode: "cors",
         body: formData
