@@ -28,7 +28,7 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-1. Finish up last parts of image uploads (Astro API)
+1. Finish up Password and Username changes
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
 5. Check to see if image authentication has any safer methods (or if it even needs safer methods)
