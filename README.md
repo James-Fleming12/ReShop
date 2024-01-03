@@ -11,7 +11,7 @@ Backend: ExpressJS, NodeJS, Prisma
 Database: PostgresQL, AWS S3 (Images), bcrypt (hashing)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
-Mobile: Kotlin, Swift
+Mobile: ReactNative, ExpressJS (Proxy Server)
 
 **After Prototype**:
 Backend API -> Either Bun, Hono, Prisma or Gin, GORM 
