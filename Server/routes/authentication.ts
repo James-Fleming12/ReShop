@@ -75,8 +75,9 @@ router.post('/register', async (req: Request, res: Response) => {
             password: hash,
             tokenc: tokeng,
         }
-    });
-    res.status(200).json({ message: "User Created" });
+    }).catch(() => null);
+    if (!created) return res.status(404).json({ message: "Database Error" });
+    return res.status(200).json({ message: "User Created" });
 });
 
 module.exports = router;

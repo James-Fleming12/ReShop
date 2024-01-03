@@ -38,10 +38,11 @@ if (!response || !response.ok) {
 <CommonHead title="Your Profile"/>
 <body>
     <NavBar />
-    <h1>{username}'s Profile</h1>
+    <h1>Your Profile</h1>
     <Changepfp client:load/>
     { working ? <ChangeInfo client:load userBio={bio} name={name} /> : <p>Server Error</p> }
     <form action="/api/auth/signout">
         <button type="submit">SignOut</button>
     </form>
+    <p><a href={"/profile/" + username}>How Other People See Your Profile</a></p>
 </body>

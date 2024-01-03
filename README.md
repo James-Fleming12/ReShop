@@ -32,10 +32,14 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
+0. Test basic Post implementation
 1. Finish up Password and Username changes
+1. Start work on buying listings (Stripe)
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
+4. Implement localstorage for each form so users don't lose progress on reload
 5. Check to see if image authentication has any safer methods (or if it even needs safer methods)
+    - Also have token authentication in there
 6. Check if spaces can be added to form info to mess with database (if trims are needed)
 7. Include Cypress and Jest (testing)
 8. Include botting protection for registration and logging in
@@ -59,3 +63,7 @@ Necessary Installations to Run:
     - `npx cypress run` will run all test cases (defined in `cypress/e2e`)
 2. Jest (Unit, contained in Server):
     - `npm jest` will run all test cases (defined in `tests`)
+
+## Precautions before Production:
+1. Clear the AWS S3 Bucket (of everything except for `defaultpfp`)
+    - Since the database often had to reset during development, the bucket might have unused images (a little dangerous)
