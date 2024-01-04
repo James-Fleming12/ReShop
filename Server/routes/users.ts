@@ -117,7 +117,7 @@ router.get('/get/:username', async (req: Request, res: Response) => {
 // the HTTP body will hold the new username and the user's password
 router.post('/changeusername/:username', async (req: Request, res: Response) => {
     const username = req.params.username;
-    const formData = await req.body.json();
+    const formData = await req.body;
     if (!formData) return res.status(409).json({ message: "Invalid Form" });
     const newname = formData.username;
     const password = formData.password;

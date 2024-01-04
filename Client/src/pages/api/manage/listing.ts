@@ -20,12 +20,13 @@ export const POST: APIRoute = async({ request, cookies, redirect }) => {
         mode: "cors",
         body: formData
     }).catch(() => null);
+    console.log(response);
 
     if (!response) return new Response(JSON.stringify({ message: "Invalid Server Response" }), { status: 404 });
     const data = await response.json().catch(() => { message: "Error" });
     if (!response.ok) {
         return new Response(JSON.stringify({ message: data.message }), { status: 404 });
     }
-
-    return redirect("/"); // redirect to the newly created listing
+    console.log("/listing/" + data.id);
+    return new Response(JSON.stringify({ url: "/listing/" + data.id }));
 };

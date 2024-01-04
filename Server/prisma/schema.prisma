@@ -28,9 +28,10 @@ model user{
 model post{
   id        Int      @id @default(autoincrement())
   postId    String   @unique
-  title     String   
+  title     String
   bio       String
   value     Int
+  purchase  Boolean  @default(false)
   pictures  String[] 
   created   DateTime @default(now())
 }

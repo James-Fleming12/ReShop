@@ -10,6 +10,7 @@ interface FileRequest extends Request {
 
 const express = require('express');
 const router = express.Router();
+router.use(express.json());
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -57,24 +58,20 @@ router.get('/get/:id', async (req: Request, res: Response) => {
 
 // takes in a username parameter, and formData including the token
 // returns the link to the created listing
-router.post('/create/:username', async (req: FileRequest, res: Response) => {
-    const files = req.files;
-    console.log(files);
+router.post('/create/:username', async (req: Request, res: Response) => {
+    const files = (req as FileRequest).files;
     if (!files) return res.status(409).json({ message: "No Files Included" });
     if (files.length > 5) return res.status(409).json({ message: "Too Many Files" });
-    for (let file of files){
-        if(!allowed_files.includes(file.mimetype)) return res.status(409).json({ message: "Invalid File Type" });
-        if(file.size > 200000) return res.status(409).json({ message: "File Too Large" }); // might want to change the allowed size
-    }
+    const fileKeys = Object.keys((req as FileRequest).files);
+    fileKeys.forEach((key) => {
+        const file = files[key];
+        if (!allowed_files.includes(file.mimetype)) return res.status(409).json({ message: "Invalid File Type" });
+        if (file.size > 2000000) return res.status(409).json({ message: `${file.name} is Too Large` });
+    });
     const username = req.params.username;
-    const formData = await req.body.json().catch(() => null);
-    if (!formData) return res.status(409).json({ message: "Invalid Request" });
-    const title = formData.title;
-    const bio = formData.bio;
-    const val = formData.value;
-    const token = formData.token;
-    console.log(val, typeof(val)); // checking if its a string or number 
-    if (!title || !bio || !val) return res.status(409).json({ message: "Invalid Form Information" });
+    if (!req.body) return res.status(409).json({ message: "Invalid Request" });
+    const { title, bio, value, token } = req.body;
+    if (!title || !bio || !value) return res.status(409).json({ message: "Invalid Form Information" });
     if (!token) return res.status(409).json({ message: "Invalid Verification" });
     const user = await prisma.user.findUnique({
         where: {
@@ -88,26 +85,32 @@ router.post('/create/:username', async (req: FileRequest, res: Response) => {
     if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Credentials"});
 
     let urls: string[] = []
-    for (let [index, file] of files.entries()){
-        const generated = username + "-" + index.toString() + "-" + Date.now(); // i dont know if this is the best way to do this yet
-        const response = await client.send(new PutObjectCommand({ // but it works
+    let index: number = 1;
+    const uploadFile = async(key: string, file: any) => {
+        const generated = username + "-" + key.replace("image", "") + "-" + Date.now().toString(); // might not be the best way to do this
+        const response = await client.send(new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: generated,
             Body: file.data,
         })).catch((e) => {
-            console.log(e);
+            console.log(`AWS Server Error: ${e}`);
             return null;
         });
         if (!response) return res.status(404).json({ message: "AWS Server Error" });
         urls.push(generated);
-    }
-    console.log(urls); // only for testing purposes
+        index++;
+    };
+    await Promise.all(fileKeys.map((key) => uploadFile(key, files[key]))).catch(() => null);
 
-    // implement a id generation feature (the username of the poster and some random string)
+    console.log(urls); // only for testing purposes
+    if (urls.length < 1) return res.status(409).json({ message: "Invalid File Map" });
+
+    // might want to implement later a system that uses something like the date (confirms each is unique)
+    // currently this works though (the brute force only compares against the user's posts)
     let valid: boolean = false;
     let generated: string;
     while (!valid){
-        const added = await crypto.randomBytes(15).toString('hex').catch(() => null);
+        const added = await crypto.randomBytes(5).toString('hex');
         if (!added) return res.status(404).json({ message: "Server Error" });
         generated = username + added;
         if (!user.posts.includes(generated)){
@@ -120,7 +123,7 @@ router.post('/create/:username', async (req: FileRequest, res: Response) => {
             postId: generated!,
             title: title,
             bio: bio,
-            value: val,
+            value: parseInt(value),
             pictures: urls,
         }
     }).catch((e) => {
@@ -128,7 +131,7 @@ router.post('/create/:username', async (req: FileRequest, res: Response) => {
         return null;
     });
     if (!created) return res.status(404).json({ message: "Database Server" });
-    return res.status(200).json({ message: "created", id: generated });
+    return res.status(200).json({ message: "Listing Created", id: generated });
 });
 
 module.exports = router;

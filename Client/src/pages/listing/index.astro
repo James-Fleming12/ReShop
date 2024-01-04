@@ -5,6 +5,7 @@ import CreateListing from '../../components/Reactive/createListing.svelte';
 ---
 
 <CommonHead title="Create Listing"/>
-<NavBar />
-
-<CreateListing />
+<body>
+    <NavBar />
+    <CreateListing client:load/>
+</body>

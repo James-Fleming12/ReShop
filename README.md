@@ -2,9 +2,10 @@
 
 **Current Stack**:
 Microservice Oriented Architecture
-    - A microservice for the web client, both mobile clients, and the backend API
-Connections only need to be made between the backend API and the clients 
-    - No inter-client communication
+    - A microservice for the web client, the mobile client (and it's API), and the backend API (and the database)
+Connections only need to be made between the proxy API and the clients (Users can't access the logic backend API)
+Allows each service to be scaled appropriately
+    - If there are more requests the mobile proxy can be scaled, etc.
 
 Frontend: Astro, Svelte (interactivity), Vercel (adapter)
 Backend: ExpressJS, NodeJS, Prisma
@@ -32,9 +33,9 @@ Necessary Installations to Run:
     - The client interacts with the server separately (REST API)
 
 ## TODO:
-0. Test basic Post implementation
-1. Finish up Password and Username changes
-1. Start work on buying listings (Stripe)
+1. Integrate Listings into Users Profiles (and a primitive search bar)
+1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
+2. Messaging (some sorta websocket)
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
 4. Implement localstorage for each form so users don't lose progress on reload
@@ -43,6 +44,7 @@ Necessary Installations to Run:
 6. Check if spaces can be added to form info to mess with database (if trims are needed)
 7. Include Cypress and Jest (testing)
 8. Include botting protection for registration and logging in
+8. Listing Buying (Stripe)
 
 ## Making Edits:
 1. Client:
