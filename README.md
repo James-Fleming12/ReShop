@@ -17,6 +17,8 @@ Mobile: ReactNative, ExpressJS (Proxy Server)
 **After Prototype**:
 Backend API -> Either Bun, Hono, Prisma or Gin, GORM 
     - Improved runtime for larger request loads
+Postgres -> Postgres and Redis (Caching Requests)
+    - Only if workloads become too much
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
