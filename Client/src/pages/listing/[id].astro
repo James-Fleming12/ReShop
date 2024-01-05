@@ -1,6 +1,6 @@
 ---
-import CommonHead from '../../components/Unreactive/CommonHead.astro';
 import NavBar from '../../components/Unreactive/NavBar.astro';
+import Layout from '../../layouts/layout.astro';
 const { id } = Astro.params;
 
 console.log("almost called")
@@ -14,11 +14,9 @@ const pictures = data.urls;
 console.log("everything's ok");
 ---
 
-<CommonHead title={listing.title}/>
-<body>
-    <NavBar />
+<Layout title={listing.title}>
     <h1>{listing.title} - ${listing.value}</h1>
     <p>{listing.bio}</p>
     { pictures.map((url: string) => <img src={url}/>) }
     <p>Posted on: {listing.created}</p>
-</body>
+</Layout>

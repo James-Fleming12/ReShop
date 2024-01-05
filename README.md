@@ -37,6 +37,7 @@ Necessary Installations to Run:
 ## TODO:
 1. Integrate Listings into Users Profiles (and a primitive search bar)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
+1. Check if the NavBar can stop being called every single time (ViewTransitions)
 2. Messaging (some sorta websocket)
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password

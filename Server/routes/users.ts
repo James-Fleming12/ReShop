@@ -108,7 +108,7 @@ router.get('/get/:username', async (req: Request, res: Response) => {
         where: {
             username: username
         }
-    });
+    }).catch(() => null);
     if (!user) return res.status(409).json({ message: "No Users Exists" });
     return res.status(200).json({ user: user });
 });

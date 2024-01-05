@@ -1,15 +1,13 @@
 ---
-import CommonHead from '../components/Unreactive/CommonHead.astro';
 import NavBar from '../components/Unreactive/NavBar.astro';
 import TestFetch from '../components/Unreactive/TestFetch.astro';
+import Layout from '../layouts/layout.astro';
 ---
 
-<CommonHead title = "Home"/>
-<body>
-	<NavBar />
+<Layout title="Home">
 	<h1>ReShop</h1>
 	<TestFetch />
-</body>
+</Layout>
 
 <style lang="scss">
 	body{

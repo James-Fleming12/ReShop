@@ -1,33 +1,42 @@
 ---
-import CommonHead from '../../components/Unreactive/CommonHead.astro';
-import NavBar from '../../components/Unreactive/NavBar.astro';
 import ChangeInfo from '../../components/Reactive/changeInfo.svelte';
 import Changepfp from '../../components/Reactive/changepfp.svelte';
+import Layout from '../../layouts/layout.astro';
 import { checklogin } from '../_utils';
 
-let username: string | undefined = "";
-const token = Astro.cookies.get('jwt-token');
-const check = Astro.cookies.get("username");
+async function genCheck(){
+    let username: string | undefined = "";
+    const token = Astro.cookies.get('jwt-token');
+    const check = Astro.cookies.get("username");
 
-if(!token){
-    return Astro.redirect('signin');
-}
-if(check){
-    username = check.value;
-}else{
-    const { usernamec } = await checklogin(token.value);
-    if(usernamec){
-        username = usernamec.toString();
-        Astro.cookies.set("username", username);
-    }else{
+    if(!token){
         Astro.redirect('signin');
+        return;
     }
-}
+    if(check && check !== undefined){
+        username = check.value;
+    }else{
+        const { usernamec } = await checklogin(token.value);
+        if(usernamec){
+            username = usernamec.toString();
+            Astro.cookies.set("username", username);
+        }else{
+            Astro.redirect('signin');
+        }
+    }
 
+    return { working: true, check: check, username: username };
+}
 let bio: string = "";
 let name: string = "";
-let working = true;
-const response = await fetch(import.meta.env.API_URL + "/user/get/" + check?.value).catch(() => null);
+
+const data = await genCheck();
+if (!data) return;
+let { working, check, username } = data;
+
+console.log(check);
+
+const response = await fetch(import.meta.env.API_URL + "/user/get/" + username).catch(() => null);
 if (!response || !response.ok) {
     working = false;
 } else {
@@ -36,9 +45,7 @@ if (!response || !response.ok) {
     name = data.user.name ? data.user.name : "";
 }
 ---
-<CommonHead title="Your Profile"/>
-<body>
-    <NavBar />
+<Layout title="Your Profile">
     <h1>Your Profile</h1>
     <Changepfp client:load/>
     { working ? <ChangeInfo client:load userBio={bio} name={name} /> : <p>Server Error</p> }
@@ -46,4 +53,4 @@ if (!response || !response.ok) {
         <button type="submit">SignOut</button>
     </form>
     <p><a href={"/profile/" + username}>How Other People See Your Profile</a></p>
-</body>
+</Layout>
