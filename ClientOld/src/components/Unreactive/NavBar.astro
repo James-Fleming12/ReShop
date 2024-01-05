@@ -1,12 +1,18 @@
 ---
+import PFP from "./PFP.astro";
+import navigate from 'astro';
 const urls = [
     {url: '/', name: 'Home'},
     {url: '/test', name: 'Test'},
     {url: '/signin', name: 'Login'},
 ]
+
+const username = Astro.cookies.get("username")?.value;
+console.log(username);
 ---
 <ul>
     { urls.map((url) => <li><a href={url.url}>{url.name}</a></li>) }
+    <PFP username={username} width=50 height=50/>
 </ul>
 
 <style>
