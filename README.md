@@ -7,7 +7,7 @@ Connections only need to be made between the proxy API and the clients (Users ca
 Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
 
-Frontend: SvelteKit
+Frontend: Svelte, SvelteKit, Vite, SCSS
 Backend: ExpressJS, NodeJS, Prisma
 Database: PostgresQL, AWS S3 (Images), bcrypt (hashing)
 Testing: Jest (Unit), Cypress (End to End)
@@ -54,8 +54,8 @@ Necessary Installations to Run:
 
 ## Making Edits:
 1. Client:
-    - New Components are added to the `components` directory
-    - Astro has file-based routing, so any files added to `pages` will create a new route
+    - New Components are added to the `lib` directory
+    - SvelteKit uses Directory based routing, so any new routes need their own folder
 2. Server:
     - The server acts as the REST API of the website
     - New groups of routes are added to `routes` and mentioned/added to the main router in `startup/routes.ts`
