@@ -52,7 +52,9 @@ router.get('/pfp/:username', async (req: Request, res: Response) => {
 
 router.post('/pfp/:username', async (req: FileRequest, res: Response) => {
     const file = req.files.image;
-
+    const formData = await req.body;
+    if (!formData) return res.status(404).json({ message: "Invalid Form Response" });
+    const token = formData.token;
     // check if its an image (either magic file signatures, mime types, or being lazy and checking name)
     if (!allowed_files.includes(file.mimetype)) return res.status(409).json({ message: "Invalid File Type" });
 
@@ -65,8 +67,8 @@ router.post('/pfp/:username', async (req: FileRequest, res: Response) => {
             username: req.params.username,
         }
     }).catch(() => null);
-    console.log(req.params.username);
     if (!user) return res.status(409).json({ message: "Invalid Input" });
+    if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Token" });
 
     if (user.pfp !== "defaultpfp"){ // deleting old images
         const deleted = await client.send(new DeleteObjectCommand({

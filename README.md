@@ -7,7 +7,7 @@ Connections only need to be made between the proxy API and the clients (Users ca
 Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
 
-Frontend: Astro, Svelte (interactivity), Vercel (adapter)
+Frontend: SvelteKit
 Backend: ExpressJS, NodeJS, Prisma
 Database: PostgresQL, AWS S3 (Images), bcrypt (hashing)
 Testing: Jest (Unit), Cypress (End to End)
@@ -19,6 +19,7 @@ Backend API -> Either Bun, Hono, Prisma or Gin, GORM
     - Improved runtime for larger request loads
 Postgres -> Postgres and Redis (Caching Requests)
     - Only if workloads become too much
+Frontend -> Check if Astro is set to support SPAs yet
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
@@ -30,20 +31,22 @@ Necessary Installations to Run:
     - In both Client and Server
     - Client: API_URL
     - Server: DATABASE_URL, JWT_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
-4. `npm start` to start the client server, `nodemon index.ts` to start the backend server
-    - The server is technically in the client
+4. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server
+    - The client comes with its own proxy server
     - The client interacts with the server separately (REST API)
 
 ## TODO:
 1. Integrate Listings into Users Profiles (and a primitive search bar)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
-1. Check if the NavBar can stop being called every single time (ViewTransitions)
+1. Set limits for usernames and passwords (no spaces in usernames, capital in pass, etc.)
 2. Messaging (some sorta websocket)
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
+3. Figure out the proper way to get rid of the cookies (logging out)
 4. Implement localstorage for each form so users don't lose progress on reload
 5. Check to see if image authentication has any safer methods (or if it even needs safer methods)
     - Also have token authentication in there
+5. Implement use:enchance into forms to make them faster and more responsive
 6. Check if spaces can be added to form info to mess with database (if trims are needed)
 7. Include Cypress and Jest (testing)
 8. Include botting protection for registration and logging in

@@ -87,7 +87,7 @@ router.post('/create/:username', async (req: Request, res: Response) => {
     let urls: string[] = []
     let index: number = 1;
     const uploadFile = async(key: string, file: any) => {
-        const generated = username + "-" + key.replace("image", "") + "-" + Date.now().toString(); // might not be the best way to do this
+        const generated = username + "-" + index.toString() + "-" + Date.now().toString(); // might not be the best way to do this
         const response = await client.send(new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: generated,
@@ -102,7 +102,6 @@ router.post('/create/:username', async (req: Request, res: Response) => {
     };
     await Promise.all(fileKeys.map((key) => uploadFile(key, files[key]))).catch(() => null);
 
-    console.log(urls); // only for testing purposes
     if (urls.length < 1) return res.status(409).json({ message: "Invalid File Map" });
 
     // might want to implement later a system that uses something like the date (confirms each is unique)

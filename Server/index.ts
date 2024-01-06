@@ -29,11 +29,8 @@ app.get('/other', (req: Request, res: Response) => {
 /*
 Routes for
 - Users
-    - Returning User Info (bio, region, etc.)
     - Changing User Info (bio, region, etc.)
 - Posts
-    - Viewing Post Info
-    - Creating Posts
     - Deleting Posts
     - Responding to Posts
     - Editing Posts
