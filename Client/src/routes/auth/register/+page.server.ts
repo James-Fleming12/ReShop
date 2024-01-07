@@ -19,7 +19,7 @@ export const actions = {
         let email = formData.get("email");
         let username = formData.get("username");
         let password = formData.get("password");
-        let passcheck = formData.get("confirmation"); 
+        let passcheck = formData.get("confirmation");
         if (!email || !username || !password || !passcheck) { res.message = "Invalid Form Information" ; return res };
         email = email.toString();
         username = username.toString();
@@ -28,7 +28,7 @@ export const actions = {
         if (password !== passcheck) { res.message = "Passwords Don't Match" ; return res }
         
         // add length and valid email check
-
+        
         const response = await fetch(API_URL + "/register", {
             method: "POST",
             mode: "cors",

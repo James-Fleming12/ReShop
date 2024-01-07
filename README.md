@@ -15,11 +15,11 @@ Prodcution: Kubernetes, Consul
 Mobile: ReactNative, ExpressJS (Proxy Server)
 
 **After Prototype**:
-Backend API -> Either Bun, Hono, Prisma or Gin, GORM 
+Frontend -> Check if Astro is set to support SPAs yet
+Backend API -> Either Bun, Hono, Prisma or Gin, GORM
     - Improved runtime for larger request loads
 Postgres -> Postgres and Redis (Caching Requests)
     - Only if workloads become too much
-Frontend -> Check if Astro is set to support SPAs yet
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)

@@ -27,6 +27,32 @@ const client = new S3Client(s3Config);
 
 const allowed_files = ['image/png', 'image/jpeg', 'image/jpg']; // check these later
 
+router.post('/search', async (req: Request, res: Response) => {
+    const data = req.body;
+    let serverErr: boolean = false;
+    if (!data) return res.status(409).json({ message: "Invalid Request" });
+    const skips = data.skip ? parseInt(data.skip) : 0;
+    // make a way to get customize how many posts can be queried (data.wanted)
+    const posts = await prisma.post.findMany({
+        orderBy: {
+            created: "desc"
+        },
+        take: 10,
+        skip: skips,
+    }).catch(() => {
+        serverErr = true;
+        return null;
+    });
+    if (!posts){
+        if(serverErr){
+            return res.status(404).json({ message: "Server Error" });
+        }else{
+            return res.status(409).json({ message: "No Listings Match" });
+        }
+    }
+    
+});
+
 // takes in a post id and returns the object (with presigned urls)
 router.get('/get/:id', async (req: Request, res: Response) => {
     const postId = req.params.id;
@@ -124,6 +150,7 @@ router.post('/create/:username', async (req: Request, res: Response) => {
             bio: bio,
             value: parseInt(value),
             pictures: urls,
+            madeBy: username,
         }
     }).catch((e) => {
         console.log("Database Server Error: ", e);

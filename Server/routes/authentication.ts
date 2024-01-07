@@ -42,6 +42,12 @@ router.post('/signin', async (req: Request, res: Response) => {
 
 router.post('/register', async (req: Request, res: Response) => {
     const { email, username, password } = req.body;
+    if (email.includes(" ")) return res.status(409).json({ message: "Email Can't Contain Space" });
+    if (username.includes(" ")) return res.status(409).json({ message: "Username Can't Contain Spaces" });
+    if (username.includes("/")) return res.status(409).json({ message: "Username can't contain /s" });
+    if (username.length < 3) return res.status(409).json({ message: "" })
+    // add extra username and password checks (length, symbols, etc.)
+    
     const check = await prisma.user.findFirst({
         where: {
             OR: [
