@@ -1,4 +1,4 @@
-const TEST_URL: string = "http:/localhost:4321";
+const TEST_URL: string = "http:/localhost:5173";
 
 describe('Webpage is Up', () => {
   it('finds homepage', () => {
