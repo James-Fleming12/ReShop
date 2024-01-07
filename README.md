@@ -37,6 +37,7 @@ Necessary Installations to Run:
 
 ## TODO:
 1. Integrate Listings into Users Profiles (and a primitive search bar)
+1. Finish up Listing edits (the skeleton is already in place for the client)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
 1. Set limits for usernames and passwords (no spaces in usernames, capital in pass, etc.)
 2. Messaging (some sorta websocket)

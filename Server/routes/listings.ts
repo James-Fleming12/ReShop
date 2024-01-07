@@ -113,7 +113,8 @@ router.post('/create/:username', async (req: Request, res: Response) => {
     let urls: string[] = []
     let index: number = 1;
     const uploadFile = async(key: string, file: any) => {
-        const generated = username + "-" + index.toString() + "-" + Date.now().toString(); // might not be the best way to do this
+        const generated = username + "-" + index.toString() + "-" + Date.now().toString(); // might not be the best way to do this (index doesn't update appropriately)
+        index++;
         const response = await client.send(new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: generated,
@@ -124,7 +125,6 @@ router.post('/create/:username', async (req: Request, res: Response) => {
         });
         if (!response) return res.status(404).json({ message: "AWS Server Error" });
         urls.push(generated);
-        index++;
     };
     await Promise.all(fileKeys.map((key) => uploadFile(key, files[key]))).catch(() => null);
 

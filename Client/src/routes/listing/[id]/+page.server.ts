@@ -10,6 +10,7 @@ export const load = (async ({ params }) => {
             bio: "",
             value: 0,
             created: undefined,
+            madeBy: "",
         },
         pictures: [""],
     }

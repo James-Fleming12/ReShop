@@ -15,6 +15,7 @@
 {#if data.listing}
     <h1>{data.listing.title} - ${data.listing.value}</h1>
     <p>{data.listing.bio}</p>
+    <p>Listing by <a href={"/profile/" + data.listing.created}>{data.listing.created}</a></p>
     {#each data.pictures as source}
         <!-- svelte-ignore a11y-img-redundant-alt -->
         <img src={source} alt="Picture"/>
