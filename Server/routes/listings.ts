@@ -27,8 +27,19 @@ const client = new S3Client(s3Config);
 
 const allowed_files = ['image/png', 'image/jpeg', 'image/jpg']; // check these later
 
+const validateListingInfo = (title: string, bio: string, value: number): string =>{
+    if (!title) return "Invalid Title";
+    if (!bio) return "Invalid Bio";
+    if (!value) return "Invalid Value";
+    if (title.length < 5) return "Title Too Short";
+    if (bio.length < 3) return "Bio Too Short";
+    if (title.length > 20) return "Title Too Long";
+    if (bio.length > 100) return "Bio Too Long";
+    return "Success";
+}
+
 router.post('/search', async (req: Request, res: Response) => {
-    const data = req.body;
+    const data = await req.body;
     let serverErr: boolean = false;
     if (!data) return res.status(409).json({ message: "Invalid Request" });
     const skips = data.skip ? parseInt(data.skip) : 0;
@@ -50,13 +61,142 @@ router.post('/search', async (req: Request, res: Response) => {
             return res.status(409).json({ message: "No Listings Match" });
         }
     }
-    
+    return res.status(200).json({ listings: posts });
+});
+
+// might be better to delete the post first, then the AWS images (less chance for bugs from no images)
+router.post('/edit/:id', async (req: Request, res: Response) => {
+    const postId = req.params.id;
+    const post = await prisma.post.findUnique({
+        where: {
+            postId: postId,
+        }
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!post) return res.status(409).json({ message: "Invalid Post ID" });
+    const data = await req.body; // username, token, and the changes that need to be made (title, bio, value)
+    if (!data) return res.status(409).json({ message: "Invalid Request" });
+    const username = data.username;
+    const token = data.token;
+    if (post.madeBy !== username) return res.status(409).json({ message: "Invalid Credentials" });
+    const checking = validateListingInfo(data.title ?? post.title, data.bio ?? post.bio, data.value ?? post.value);
+    if (checking !== "Success") return res.status(409).json({ message: checking });
+    const user = await prisma.user.findUnique({
+        where: {
+            username: post.madeBy,
+        }
+    }).catch((e) => {
+        console.log(e);
+        return null
+    });
+    if (!user) return res.status(409).json({ message: "Invalid User" });
+    if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Credentials"});
+    const files = (req as FileRequest).files;
+    let newurl: string[] = []
+    // resetting the uploaded pictures
+    if (files && files.length > 0) {
+        const fileKeys = Object.keys(files);
+        fileKeys.forEach((key) => {
+            const file = files[key];
+            if (!allowed_files.includes(file.mimetype)) return res.status(409).json({ message: "Invalid File Type" });
+            if (file.size > 2000000) return res.status(409).json({ message: `${file.name} is Too Large` });
+        });
+        for (let key of post.pictures){
+            const delRes = await client.send(new DeleteObjectCommand({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: key,
+            })).catch((e) => {
+                console.log(`AWS Server Error: ${e}`);
+                return null;
+            });
+            if (!delRes) return res.status(404).json({ message: "Invalid AWS Response" });
+        }
+        const uploadFile = async(key: string, file: any) => {
+            const generated = username + "-" + key + "-" + Date.now().toString();
+            // there has to be a better way to do this, this just shouldn't work
+            const response = await client.send(new PutObjectCommand({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: generated,
+                Body: file.data,
+            })).catch((e) => {
+                console.log(`AWS Server Error: ${e}`);
+                return null;
+            });
+            if (!response) return res.status(404).json({ message: "AWS Server Error" });
+            newurl.push(generated);
+        };
+        await Promise.all(fileKeys.map((key) => uploadFile(key, files[key]))).catch(() => null);
+        if (newurl.length < 1) return res.status(409).json({ message: "Invalid File Map" });
+    }
+    // might be a better way to do this
+    const updateinfo = {
+        title: data.title ?? post.title,
+        bio: data.bio ?? post.bio,
+        value: data.value ?? post.value,
+        pictures: newurl.length > 0 ? newurl : post.pictures,
+    }
+    const updated = await prisma.post.update({
+        where: {
+            postId: postId,
+        },
+        data: updateinfo
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!updated) return res.status(404).json({ message: "Database Server Error" });
+    return res.status(200).json({ message: "Listing Information Updated" });
+});
+
+// again might be better to delete the post first, then the AWS images (less chance for bugs from no images)
+router.post('/delete/:id', async (req: Request, res: Response) => {
+    const postId = req.params.id;
+    const post = await prisma.post.findUnique({
+        where: {
+            postId: postId,
+        }
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    const { username, token } = req.body;
+    if (!post) return res.status(404).json({ message: "Database Server Error" });
+    if (!username || !token || username !== post.madeBy) return res.status(409).json({ message: "Invalid Credentials" });
+    const user = await prisma.user.findUnique({
+        where: {
+            username: post.madeBy,
+        }
+    }).catch(() => null);
+    if (!user) return res.status(404).json({ message: "Server Error" });
+    if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Credentials"});
+    for (let key of post.pictures){
+        const delRes = await client.send(new DeleteObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: key,
+        })).catch((e) => {
+            console.log(`AWS Server Error: ${e}`);
+            return null;
+        });
+        if (!delRes) return res.status(404).json({ message: "AWS Server Error" });
+    }
+    const deleted = await prisma.post.delete({
+        where: {
+            postId: postId,
+        }
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!deleted) return res.status(404).json({ message: "Database Server Error" });
+    return res.status(200).json({ message: "Listing Deleted" });
 });
 
 // takes in a post id and returns the object (with presigned urls)
 router.get('/get/:id', async (req: Request, res: Response) => {
     const postId = req.params.id;
-    const post = await prisma.post.findFirst({
+    const post = await prisma.post.findUnique({
         where: {
             postId: postId,
         }
@@ -111,10 +251,9 @@ router.post('/create/:username', async (req: Request, res: Response) => {
     if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Credentials"});
 
     let urls: string[] = []
-    let index: number = 1;
     const uploadFile = async(key: string, file: any) => {
-        const generated = username + "-" + index.toString() + "-" + Date.now().toString(); // might not be the best way to do this (index doesn't update appropriately)
-        index++;
+        const generated = username + "-" + key + "-" + Date.now().toString(); 
+        // again, there has to be a better way to do this
         const response = await client.send(new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: generated,

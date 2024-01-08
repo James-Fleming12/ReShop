@@ -28,7 +28,7 @@ export const load = (async ({ request, cookies: Cookies, params }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-    default: async({ request, cookies: Cookies }) => {
+    edit: async({ request, cookies: Cookies }) => {
         const res = {
             message: "",
             success: false,
@@ -39,6 +39,18 @@ export const actions = {
         // handle changing the information
 
         res.message = "Changes Made";
+        res.success = true;
+        return res;
+    },
+    delete: async({ request, cookies: Cookies }) => {
+        const res = {
+            message: "",
+            success: false,
+        }
+
+        // API request
+
+        res.message = "Listing Deleted";
         res.success = true;
         return res;
     }
