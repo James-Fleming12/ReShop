@@ -38,8 +38,18 @@
 {#if form && form.posts}
     {#each form.posts as post}
         <div class="container">
-            <p><strong><a href={"/listing/" + post.postId}>{post.title}</a></strong></p>
-            <p>{post.bio}</p> <!-- Shorten this if too long -->
+            <p><strong><a href={"/listing/" + post.postId}>
+                {#if post.title.length > 45}
+                    <p>{post.title.slice(42) + "..."}</p>
+                {:else}
+                    <p>{post.title}</p>
+                {/if}
+            </a></strong></p>
+            {#if post.bio.length > 45}
+                <p>{post.bio.slice(0, 42) + "..."}</p> 
+            {:else}
+                <p>{post.bio}</p>
+            {/if}
             <p>Value: {post.value}</p>
             <!-- svelte-ignore a11y-img-redundant-alt -->
             <img src={post.pictures[0]} alt="Listing Picture" width=100 height=100/>
@@ -48,8 +58,18 @@
 {:else}
     {#each data.listings as post}
         <div class="container">
-            <p><strong><a href={"/listing/" + post.postId}>{post.title}</a></strong></p>
-            <p>{post.bio}</p> <!-- Shorten this if too long -->
+            <p><strong><a href={"/listing/" + post.postId}>
+                {#if post.title.length > 45}
+                    <p>{post.title.slice(42) + "..."}</p>
+                {:else}
+                    <p>{post.title}</p>
+                {/if}
+            </a></strong></p>
+            {#if post.bio.length > 45}
+                <p>{post.bio.slice(0, 42) + "..."}</p> 
+            {:else}
+                <p>{post.bio}</p>
+            {/if}
             <p>Value: {post.value}</p>
             <!-- svelte-ignore a11y-img-redundant-alt -->
             <img src={post.pictures[0]} alt="Listing Picture" width=100 height=100/>

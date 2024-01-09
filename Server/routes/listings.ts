@@ -212,10 +212,8 @@ router.post('/delete/:id', async (req: Request, res: Response) => {
         console.log(`Database Server Error: ${e}`);
         return null;
     });
-    console.log(req);
     const { username, token, postname } = req.body;
     if (!post) return res.status(404).json({ message: "Database Server Error" });
-    console.log(post.title, postname);
     if (post.title !== postname) return res.status(409).json({ message: "Listing Name Don't Match" });
     if (!username || !token || username !== post.madeBy) return res.status(409).json({ message: "Invalid Credentials" });
     const user = await prisma.user.findUnique({

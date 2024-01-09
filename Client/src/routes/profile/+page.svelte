@@ -57,13 +57,19 @@
 {/if}
 
 {#if data.posts && data.posts.length > 1}
-    <p>No Listings To Show <a href="/listing">Create One</a></p>
-{:else}
     <h1>Current Listings</h1>
+{:else}
+    <p>No Listings To Show <a href="/listing">Create One</a></p>
 {/if}
 {#each data.posts as post}
     <div class="post-container">
-        <p><a href={"/listing/" + post.postId}>{post.title}</a> - ${post.value}</p>
+        <p><a href={"/listing/" + post.postId}>
+            {#if post.title.length > 30} 
+                {post.title.slice(0, 27) + "..."}
+            {:else}
+                {post.title}
+            {/if}
+        </a> - ${post.value}</p>
         <!-- svelte-ignore a11y-img-redundant-alt -->
         <img src={post.pictures[0]} alt="Post Picture" width=100 height=100 />
     </div>
