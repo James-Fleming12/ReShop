@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
 
     export let form;
-    let inputs = [1]
+    let inputs = [1];
     const addInput = () => {
         inputs = [...inputs, inputs[inputs.length-1] + 1]
     }

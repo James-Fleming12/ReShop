@@ -1,7 +1,7 @@
 import { API_URL } from '$env/static/private';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, cookies: Cookies }) => {
     let res = {
         message: "Server Error",
         success: false,
@@ -11,8 +11,10 @@ export const load = (async ({ params }) => {
             value: 0,
             created: undefined,
             madeBy: "",
+            postId: "",
         },
         pictures: [""],
+        curruser: Cookies.get("username"),
     }
     const response = await fetch(API_URL + "/listing/get/" + params.id).catch(() => null);
     if (!response) return res;

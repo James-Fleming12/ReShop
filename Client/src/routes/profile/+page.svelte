@@ -55,6 +55,22 @@
         <p class="warning">{form.message}</p>
     {/if}
 {/if}
+
+{#if data.posts && data.posts.length > 1}
+    <p>No Listings To Show <a href="/listing">Create One</a></p>
+{:else}
+    <h1>Current Listings</h1>
+{/if}
+{#each data.posts as post}
+    <div class="post-container">
+        <p><a href={"/listing/" + post.postId}>{post.title}</a> - ${post.value}</p>
+        <!-- svelte-ignore a11y-img-redundant-alt -->
+        <img src={post.pictures[0]} alt="Post Picture" width=100 height=100 />
+    </div>
+{/each}
+
+<br>
+
 <button on:click={logout}>Log Out</button>
 
 <style lang="scss">
@@ -63,5 +79,13 @@
     }
     .success{
         color:green;
+    }
+    .post-container{
+        border: 1px solid black;
+        padding: 15px;
+    }
+
+    p{
+        margin:0;
     }
 </style>

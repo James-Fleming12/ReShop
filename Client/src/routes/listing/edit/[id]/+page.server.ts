@@ -20,7 +20,7 @@ export const load = (async ({ request, cookies: Cookies, params }) => {
     if (!response || !response.ok) { res.message = "Server Error" ; return res }
     const data = await response.json().catch(() => null);
     if (!data) { res.message = "Server Error" ; return res }
-    if(curruser !== data.madeBy) { redirect(307, "/") }
+    if(curruser !== data.listing.madeBy) { redirect(307, "/") }
     res.listing = data.listing;
     res.pictures = data.urls;
     res.success = true;
@@ -28,16 +28,30 @@ export const load = (async ({ request, cookies: Cookies, params }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-    edit: async({ request, cookies: Cookies }) => {
+    edit: async({ request, cookies: Cookies, params }) => {
         const res = {
             message: "",
             success: false,
         }
         const form = await request.formData().catch(() => null);
         if (!form) { res.message = "Invalid Form Response" ; return res };
-
-        // handle changing the information
-
+        const token = Cookies.get("jwt-token");
+        const username = Cookies.get("username");
+        if (!token || !username) { res.message = "Invalid Credentials" ; return res }
+        form.append("token", token);
+        form.append("username", username);
+        const response = await fetch(API_URL + "/listing/edit/" + params.id, {
+            method: "POST",
+            mode: "cors",
+            body: form
+        }).catch((e) => {
+            console.log(`Backend Server Error: ${e}`);
+            return null;
+        });
+        if (!response) { res.message = "Invalid Server Response" ; return res }
+        const data = await response.json().catch(() => null);
+        if (!data) { res.message = "Invalid Server Response" ; return res }
+        if (!response.ok) { res.message = data.message ; return res }
         res.message = "Changes Made";
         res.success = true;
         return res;

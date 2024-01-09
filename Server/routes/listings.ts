@@ -33,8 +33,8 @@ const validateListingInfo = (title: string, bio: string, value: number): string 
     if (!value) return "Invalid Value";
     if (title.length < 5) return "Title Too Short";
     if (bio.length < 3) return "Bio Too Short";
-    if (title.length > 20) return "Title Too Long";
-    if (bio.length > 100) return "Bio Too Long";
+    if (title.length > 50) return "Title Too Long";
+    if (bio.length > 150) return "Bio Too Long";
     return "Success";
 }
 
@@ -45,6 +45,11 @@ router.post('/search', async (req: Request, res: Response) => {
     const skips = data.skip ? parseInt(data.skip) : 0;
     // make a way to get customize how many posts can be queried (data.wanted)
     const posts = await prisma.post.findMany({
+        where: {
+            title: {
+                contains: data.search && data.search.length > 1 ? data.search : undefined,
+            }
+        },
         orderBy: {
             created: "desc"
         },
@@ -89,14 +94,14 @@ router.post('/edit/:id', async (req: Request, res: Response) => {
         }
     }).catch((e) => {
         console.log(e);
-        return null
+        return null;
     });
     if (!user) return res.status(409).json({ message: "Invalid User" });
     if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Credentials"});
     const files = (req as FileRequest).files;
     let newurl: string[] = []
     // resetting the uploaded pictures
-    if (files && files.length > 0) {
+    if (files && [].concat(files).length > 0) {
         const fileKeys = Object.keys(files);
         fileKeys.forEach((key) => {
             const file = files[key];
@@ -130,18 +135,23 @@ router.post('/edit/:id', async (req: Request, res: Response) => {
         await Promise.all(fileKeys.map((key) => uploadFile(key, files[key]))).catch(() => null);
         if (newurl.length < 1) return res.status(409).json({ message: "Invalid File Map" });
     }
-    // might be a better way to do this
-    const updateinfo = {
+    const data2 = { 
         title: data.title ?? post.title,
         bio: data.bio ?? post.bio,
         value: data.value ?? post.value,
         pictures: newurl.length > 0 ? newurl : post.pictures,
     }
+    // might be a better way to do this
     const updated = await prisma.post.update({
         where: {
             postId: postId,
         },
-        data: updateinfo
+        data: { // check if making these undefined applies the changes or not
+            title: data.title ? data.title : post.title,
+            bio: data.bio ? data.bio : post.bio,
+            value: data.value ? data.value : post.value,
+            pictures: newurl.length > 0 ? newurl : post.pictures,
+        }
     }).catch((e) => {
         console.log(`Database Server Error: ${e}`);
         return null;
@@ -220,6 +230,35 @@ router.get('/get/:id', async (req: Request, res: Response) => {
         urls.push(presigned);
     }
     return res.status(200).json({ listing: post, urls: urls });
+});
+
+// returns all the posts for a given username (to be filtered and organized in the proxy servers)
+// the only logic provided is the generated the presigned url for the first image of each post
+router.get('/getuser/:username', async (req: Request, res: Response) => {
+    const username = req.params.username;
+    let posts = await prisma.post.findMany({
+        where: {
+            madeBy: username,
+        }
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!posts) return res.status(404).json({ message: "Database Server Error" });
+    for (let post of posts){
+        const urls = post.pictures;
+        if (!urls || urls.length < 1) return res.status(409).json({ message: "Invalid Picture Information for Listing" });
+        const presigned = await getSignedUrl(client, new GetObjectCommand({ 
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: urls[0],
+        }), { expiresIn: 2000 }).catch((e) => {
+            console.log("AWS Server Error: ", e);
+            return null;
+        });
+        if (!presigned) return res.status(404).json({ message: "AWS Server Error" });
+        post.pictures = [presigned]; // has to be an array cause of typing
+    }
+    return res.status(200).json({ posts: posts });
 });
 
 // takes in a username parameter, and formData including the token
