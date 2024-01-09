@@ -37,3 +37,13 @@
         <img src={post.pictures[0]} alt="Post Picture" width=100 height=100 />
     </div>
 {/each}
+
+<style lang="scss">
+    .post-container{
+        border: 1px solid black;
+        padding: 15px;
+    }
+    p{
+        margin:0;
+    }
+</style>
