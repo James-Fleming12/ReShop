@@ -33,9 +33,9 @@
 <form method="POST" action="?/changeInfo">
     <label for="name">Name</label>
     {#if data.name}
-        <input type="text" name="name" id="name" value={data.name}/>
+        <input type="text" name="name" id="name" value={data.name} autocomplete="off" />
     {:else} 
-        <input type="text" name="name" id="name" />
+        <input type="text" name="name" id="name" autocomplete="off" />
     {/if} 
     <label for="bio">Bio</label>
     {#if data.bio}

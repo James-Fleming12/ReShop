@@ -32,7 +32,7 @@
 <form on:submit={submit}>
     <label>
         Name
-        <input type="text" id="name" name="name" placeholder="{name}"/>
+        <input type="text" id="name" name="name" placeholder="{name}" autocomplete="off" />
     </label>
     <label>
         Bio

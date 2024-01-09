@@ -44,7 +44,7 @@
 
 <form on:submit={submit} enctype="multipart/form-data">
     <h1>Title</h1>
-    <input type="text" id="title" name="title" required/>
+    <input type="text" id="title" name="title" autocomplete="off" required />
     <hr>
     <h1>Bio</h1>
     <textarea id="bio" name="bio" required/>

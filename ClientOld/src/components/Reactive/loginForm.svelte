@@ -31,7 +31,7 @@
 <form on:submit={submit}>
     <label>
         Email
-        <input type="text" id="email" name="email" required/>
+        <input type="text" id="email" name="email" autocomplete="off" required/>
     </label>
     <label>
         Password

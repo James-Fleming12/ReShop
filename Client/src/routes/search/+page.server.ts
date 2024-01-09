@@ -16,7 +16,7 @@ export const load = (async ({ }) => {
     if (!posts) return redirect(307, "/");
     const data = await posts.json().catch(() => null);
     if (!data) return redirect(307, "/");
-    return { listings: data.listings, time: Date.now() };
+    return { listings: data.listings, time: new Date() };
 }) satisfies PageServerLoad;
 
 export const actions = {

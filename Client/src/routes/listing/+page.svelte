@@ -29,7 +29,7 @@
 <h1>Create Listing</h1>
 <form method="POST" enctype="multipart/form-data">
     <label for="title">Title</label>
-    <input type="text" id="title" name="title" required/>
+    <input type="text" id="title" name="title" autocomplete="off" required/>
     <hr>
     <label for="bio">Details</label>
     <textarea id="bio" name="bio" required/>

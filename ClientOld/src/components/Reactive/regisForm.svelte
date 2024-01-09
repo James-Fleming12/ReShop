@@ -31,11 +31,11 @@
 <form on:submit={submit}>
     <label>
         Email
-        <input type="text" id="email" name="email" required/>
+        <input type="text" id="email" name="email" autocomplete="off" required/>
     </label>
     <label>
         Username
-        <input type="text" id="username" name="username" required/>
+        <input type="text" id="username" name="username" autocomplete="off" required/>
     </label>
     <label>
         Password

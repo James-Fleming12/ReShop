@@ -17,7 +17,7 @@
 
 <h1>Login</h1>
 <form method="POST" use:enhance>
-    <input type="text" id="email" name="email" placeholder="Email..." required/>
+    <input type="text" id="email" name="email" placeholder="Email..." autocomplete="off" required/>
     <input type="password" id="password" name="password" placeholder="Password..." required/>
     <button type="submit">Submit</button>
     {#if form}

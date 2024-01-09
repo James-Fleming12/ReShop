@@ -18,7 +18,7 @@
 
 <h1>Edit Listing</h1>
 <form method="POST" action="?/edit" enctype="multipart/form-data" >
-    <input type="text" id="title" name="title" value={data.listing.title}/>
+    <input type="text" id="title" name="title" value={data.listing.title} autocomplete="off"/>
     <textarea id="bio" name="bio">{data.listing.bio}</textarea>
     <input type="number" id="value" name="value" value={data.listing.value}/>
     {#if !photoForm}
@@ -41,7 +41,7 @@
 
 <form method="POST" action="?/delete">
     <h1>Type in Listing Name</h1> <!-- Security Check: Ensure Deletion is Wanted -->
-    <input type="text" id="title" name="title" /> <!-- I also just don't know how to do GET requests in SvelteKit yet -->
+    <input type="text" id="title" name="title" autocomplete="off" /> <!-- I also just don't know how to do GET requests in SvelteKit yet -->
     <button type="submit">Delete Listing</button>
 </form>
 

@@ -13,7 +13,6 @@ const router = express.Router();
 router.use(express.json());
 
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const s3Config = {
@@ -77,6 +76,13 @@ router.post('/search', async (req: Request, res: Response) => {
             title: {
                 contains: data.search && data.search.length > 1 ? data.search : undefined,
                 mode: "insensitive",
+            },
+            value: {
+                gte: data.minval ? parseInt(data.minval) : undefined,
+                lte: data.maxval ? parseInt(data.maxval) : undefined,
+            },
+            created: {
+                gt: (data.querDate as Date) // might not work properly as intended
             }
         },
         orderBy: {
