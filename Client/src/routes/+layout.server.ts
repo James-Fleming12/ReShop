@@ -24,6 +24,9 @@ export const load = (async ({ cookies: Cookies }) => {
             const data = await response.json().catch(() => null);
             Cookies.set("username", data.user, { path: "/" });
             logged = true;
+        }else{
+            Cookies.delete("jwt-token", { path: "/" });
+            logged = false;
         }
     }
     if(logged){
