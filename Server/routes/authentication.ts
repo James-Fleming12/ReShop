@@ -62,17 +62,28 @@ router.post('/register', async (req: Request, res: Response) => {
 
     let valid: boolean = false;
     let tokeng: string = "";
+    let channel: string = "";
     while(!valid){
-        tokeng = await crypto.randomBytes(15).toString('hex');
+        tokeng = await crypto.randomBytes(15).toString('hex'); // has to be a better way to do this
+        channel = await crypto.randomBytes(15).toString('hex');
         const tokencheck = await prisma.user.findFirst({
             where: {
-                tokenc: tokeng
+                OR: [
+                    { tokenc: tokeng },
+                    { channel: channel },
+                ]
             }
-        })
+        }).catch((e) => {
+            console.log(`Database Server Error: ${e}`);
+            return null;
+        });
         if(!tokencheck){
             valid = true;
         }
     }
+    valid = false;
+
+    if (channel.length < 1 || tokeng.length < 1) return res.status(404).json({ message: "Server Error" });
     
     const created = await prisma.user.create({
         data: {
@@ -80,6 +91,7 @@ router.post('/register', async (req: Request, res: Response) => {
             username: username,
             password: hash,
             tokenc: tokeng,
+            channel: channel,
         }
     }).catch(() => null);
     if (!created) return res.status(404).json({ message: "Database Error" });

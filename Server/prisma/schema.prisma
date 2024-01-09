@@ -18,11 +18,21 @@ model user{
   username  String  @unique 
   password  String  
   tokenc    String  // Used to generate tokens so that users can nullify their cookies (log everyone out)
+  channel   String
   pfp       String  @default("defaultpfp") // link to the profile picture saved in S3
   posts     String[]
+  blocked   String[]
   name      String?
   region    String?
   bio       String?
+}
+
+model message{
+  id        Int     @id @default(autoincrement())
+  sender    String
+  receiver  String
+  message   String
+  seen      Boolean @default(false)
 }
 
 model post{
