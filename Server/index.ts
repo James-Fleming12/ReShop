@@ -29,11 +29,9 @@ app.get('/other', (req: Request, res: Response) => {
 /*
 Routes for
 - Users
-    - Changing User Info (bio, region, etc.)
+    - Changing User Info (username, password)
 - Posts
-    - Deleting Posts
     - Responding to Posts
-    - Editing Posts
 */
 
 app.listen(port, () => {

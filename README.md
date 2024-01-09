@@ -41,6 +41,7 @@ Necessary Installations to Run:
 2. Set limits for usernames and passwords (no spaces in usernames, capital in pass, etc.)
 2. Messaging (some sorta websocket, socketio, pusher, etc.)
 2. Check if JWT-Token or Username is succeptable to XSS (document.cookie)
+2. Test Search Engine pages feature
 2. Nodemailer within Client that sends a request to the API to store a link to reset password
     - astro call, leads to api call, leads to database code being stored for link, leads to email being sent with link, leads to new link that can reset password
 3. Figure out the proper way to get rid of the cookies (logging out)

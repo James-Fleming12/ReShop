@@ -38,22 +38,51 @@ const validateListingInfo = (title: string, bio: string, value: number): string 
     return "Success";
 }
 
+// sends back the 10 most recent made posts
+router.get('/search', async (req: Request, res: Response) => {
+    const posts = await prisma.post.findMany({
+        orderBy: {
+            created: "desc"
+        },
+        take: 10,
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!posts) return res.status(404).json({ message: "Database Server Error" });
+    for (let post of posts){
+        const urls = post.pictures;
+        if (!urls || urls.length < 1) return res.status(409).json({ message: "Invalid Picture Information for Listing" });
+        const presigned = await getSignedUrl(client, new GetObjectCommand({ 
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: urls[0],
+        }), { expiresIn: 2000 }).catch((e) => {
+            console.log("AWS Server Error: ", e);
+            return null;
+        });
+        if (!presigned) return res.status(404).json({ message: "AWS Server Error" });
+        post.pictures = [presigned]; // has to be an array cause of typing
+    }
+    return res.status(200).json({ listings: posts });
+});
+
 router.post('/search', async (req: Request, res: Response) => {
     const data = await req.body;
     let serverErr: boolean = false;
     if (!data) return res.status(409).json({ message: "Invalid Request" });
     const skips = data.skip ? parseInt(data.skip) : 0;
-    // make a way to get customize how many posts can be queried (data.wanted)
+    const takes = data.take ? parseInt(data.take) : 10;
     const posts = await prisma.post.findMany({
         where: {
             title: {
                 contains: data.search && data.search.length > 1 ? data.search : undefined,
+                mode: "insensitive",
             }
         },
         orderBy: {
             created: "desc"
         },
-        take: 10,
+        take: takes,
         skip: skips,
     }).catch(() => {
         serverErr = true;
@@ -65,6 +94,18 @@ router.post('/search', async (req: Request, res: Response) => {
         }else{
             return res.status(409).json({ message: "No Listings Match" });
         }
+    }    for (let post of posts){
+        const urls = post.pictures;
+        if (!urls || urls.length < 1) return res.status(409).json({ message: "Invalid Picture Information for Listing" });
+        const presigned = await getSignedUrl(client, new GetObjectCommand({ 
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: urls[0],
+        }), { expiresIn: 2000 }).catch((e) => {
+            console.log("AWS Server Error: ", e);
+            return null;
+        });
+        if (!presigned) return res.status(404).json({ message: "AWS Server Error" });
+        post.pictures = [presigned]; // has to be an array cause of typing
     }
     return res.status(200).json({ listings: posts });
 });
@@ -149,7 +190,7 @@ router.post('/edit/:id', async (req: Request, res: Response) => {
         data: { // check if making these undefined applies the changes or not
             title: data.title ? data.title : post.title,
             bio: data.bio ? data.bio : post.bio,
-            value: data.value ? data.value : post.value,
+            value: data.value ? parseInt(data.value) : post.value,
             pictures: newurl.length > 0 ? newurl : post.pictures,
         }
     }).catch((e) => {
@@ -171,8 +212,11 @@ router.post('/delete/:id', async (req: Request, res: Response) => {
         console.log(`Database Server Error: ${e}`);
         return null;
     });
-    const { username, token } = req.body;
+    console.log(req);
+    const { username, token, postname } = req.body;
     if (!post) return res.status(404).json({ message: "Database Server Error" });
+    console.log(post.title, postname);
+    if (post.title !== postname) return res.status(409).json({ message: "Listing Name Don't Match" });
     if (!username || !token || username !== post.madeBy) return res.status(409).json({ message: "Invalid Credentials" });
     const user = await prisma.user.findUnique({
         where: {

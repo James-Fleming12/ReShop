@@ -56,16 +56,33 @@ export const actions = {
         res.success = true;
         return res;
     },
-    delete: async({ request, cookies: Cookies }) => {
+    delete: async({ request, cookies: Cookies, params }) => {
         const res = {
             message: "",
             success: false,
         }
-
-        // API request
-
-        res.message = "Listing Deleted";
-        res.success = true;
-        return res;
+        const form = await request.formData().catch(() => null);
+        if (!form) { res.message = "Invalid Form" ; return res }
+        console.log(form.get("title"));
+        const response = await fetch(API_URL + "/listing/delete/" + params.id, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                token: Cookies.get("jwt-token"),
+                username: Cookies.get("username"),
+                postname: form.get("title"),
+            }),
+        }).catch((e) => {
+            console.log(`Backend Server Error: ${e}`);
+            return null;
+        });
+        if (!response) { res.message = "Invalid Response" ; return res }
+        const data = await response.json().catch(() => null);
+        if (!data) { res.message = "Server Error" ; return res }
+        if (!response.ok) { res.message = data.message ; return res }
+        redirect(303, "/profile");
     }
 }
