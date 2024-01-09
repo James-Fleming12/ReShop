@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const express = require('express');
 const router = express.Router();
 
-
+router.get("/", (req: Request, res: Response) => {
+    return res.status(200).json({ message: "Works" });
+});
 
 module.exports = router;
