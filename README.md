@@ -8,8 +8,8 @@ Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
 
 Frontend: Svelte, SvelteKit, Vite, SCSS
-Backend: ExpressJS, NodeJS, Prisma
-Database: PostgresQL, AWS S3 (Images), bcrypt (hashing)
+Backend: ExpressJS, NodeJS, Prisma, Pusher
+Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
 Mobile: ReactNative, ExpressJS (Proxy Server)
