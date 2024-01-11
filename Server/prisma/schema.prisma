@@ -29,11 +29,11 @@ model user{
 }
 
 model message{
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   sender    String
   receiver  String
   message   String
-  seen      Boolean @default(false)
+  seen      Boolean  @default(false)
 }
 
 model post{

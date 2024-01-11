@@ -8,7 +8,7 @@ Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
 
 Frontend: Svelte, SvelteKit, Vite, SCSS
-Backend: ExpressJS, NodeJS, Prisma, Pusher
+Backend: ExpressJS, NodeJS, Prisma, Pusher (Chat, Push Notifications)
 Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
