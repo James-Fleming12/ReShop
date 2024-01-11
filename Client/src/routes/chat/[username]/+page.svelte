@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     export let data: PageData;
-    export let form;
+    // export let form;
 </script>
 
 <svelte:head>
@@ -13,7 +13,9 @@
 {#if !data.success}
     <p class="warning">{data.message}</p>
 {:else}
-    <p>Chat</p>
+    {#each data.messages as message}
+        <p>Message</p>
+    {/each}
 {/if}
 
 <style lang="scss">

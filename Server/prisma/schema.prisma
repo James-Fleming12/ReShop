@@ -33,6 +33,7 @@ model message{
   sender    String
   receiver  String
   message   String
+  isImage   Boolean
   seen      Boolean  @default(false)
 }
 

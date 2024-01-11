@@ -71,6 +71,27 @@ router.get("/search/:search", async (req: Request, res: Response) => {
     return res.status(200).json({ users: users });
 });
 
+router.post("/getuser/:username", async (req: Request, res: Response) => {
+    const otheruser = req.params.username;
+    const { token, username, skips } = req.body;
+    if (!token || !username) return res.status(409).json({ message: "Invalid Credentials" });
+    const messages = await prisma.message.findMany({
+        where: {
+            OR: [
+                { receiver: otheruser, sender: username },
+                { receiver: username,sender: otheruser },
+            ]
+        },
+        take: 10, // should be 50 or more once testing is done
+        skip: skips,
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!messages) return res.status(404).json({ message: "Server Error" });
+    return res.status(200).json({ messages: messages });
+});
+
 // currently the only thing going through the body is a token, might want to move it to an authentication header instead?
 router.post("/get/:username", async (req: Request, res: Response) => {
     const username = req.params.username;
