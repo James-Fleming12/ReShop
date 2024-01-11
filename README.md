@@ -38,8 +38,11 @@ Necessary Installations to Run:
 ## TODO:
 1. Implement use:enchance on every form (no reloads)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
+1. Messaging
+    - Finish up image support (in querying images, get presigned urls)
+    - Storing new messages in the database when sent
+    - Implement Pusher (live updates)
 2. Set limits for usernames and passwords (no spaces in usernames, capital in pass, etc.)
-2. Messaging (some sorta websocket, socketio, pusher, etc.)
 2. Check if JWT-Token or Username is succeptable to XSS (document.cookie)
 2. Test Search Engine pages feature
 2. Nodemailer within Client that sends a request to the API to store a link to reset password

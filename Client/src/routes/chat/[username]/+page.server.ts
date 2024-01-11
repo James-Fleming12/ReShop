@@ -14,7 +14,7 @@ export const load = (async ({ params, cookies: Cookies }) => {
         messages: [{
             message: "",
             user: "",
-            type: "",
+            images: [""],
         }],
     };
     const response = await fetch(API_URL + "/chat/getuser/" + otheruser, {

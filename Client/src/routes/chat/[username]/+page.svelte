@@ -14,12 +14,22 @@
     <p class="warning">{data.message}</p>
 {:else}
     {#each data.messages as message}
-        <p>Message</p>
+        <p class={message.user === data.username ? "own" : "other" }>{message.message}</p>
+        {#each message.images as image}
+            <!-- svelte-ignore a11y-img-redundant-alt -->
+            <img src={image} alt="Picture"/>
+        {/each}
     {/each}
 {/if}
 
 <style lang="scss">
     .warning{
         color: red;
+    }
+    .own{
+        color: green;
+    }
+    .other{
+        color: black; // get floats right for these
     }
 </style>
