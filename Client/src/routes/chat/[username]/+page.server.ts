@@ -1,4 +1,4 @@
-import { API_URL } from '$env/static/private';
+import { API_URL, WS_URL } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -10,10 +10,13 @@ export const load = (async ({ params, cookies: Cookies }) => {
     let res = {
         message: "",
         success: false,
+        token: Cookies.get("jwt-token"),
         username: Cookies.get("username"),
+        other: params.username,
+        socketurl: WS_URL,
         messages: [{
             message: "",
-            user: "",
+            sender: "",
             images: [""],
         }],
     };
@@ -47,13 +50,12 @@ export const load = (async ({ params, cookies: Cookies }) => {
 
 export const actions =  {
     send: async ({ request, cookies: Cookies, params }) => {
-        console.log("called");
         const res = {
             message: "",
             success: false,
             sent: {
                 message: "",
-                user: "", 
+                sender: "", 
                 images: [""],
             }
         }
@@ -69,10 +71,6 @@ export const actions =  {
         const response = await fetch(API_URL + "/chat/send", {
             method: "POST",
             mode: "cors",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             body: formData,
         }).catch((e) => {
             console.log(`Backend Server Error: ${e}`);

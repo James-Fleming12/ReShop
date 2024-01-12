@@ -16,7 +16,6 @@ const prisma = new PrismaClient();
 
 const port = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -25,13 +24,14 @@ app.post('/send', (req: Request, res: Response) => {
     const serverToken = data.token;
     const username = data.username;
     const message = data.message;
+    const from = data.from;
     const presigned = data.urls;
     if (serverToken !== process.env.WS_SECRET) {
-        console.log(`User with invalid Credentials accessing WebSocket sending, Request: ${req}`);
+        console.log(`User with invalid Credentials accessing WebSocket sending, Request: ${data.token}`);
         return res.status(409).json({ message: "Invalid Credentials" });
     }
     if (!username || !message) return res.status(409).json({ message: "Invalid Information" });
-    io.to(`user_${username}`).emit('message', { "message": message, "images": presigned && presigned.length > 0 ? presigned : undefined});
+    io.to(`user_${username}`).emit('message', { "message": message, "user": from, "images": presigned && presigned.length > 0 ? presigned : undefined});
     return res.status(200).json({ message: "Update Emitted Successfully" });
 });
 
@@ -56,7 +56,6 @@ io.use(async (socket: Socket, next: NextFunction) => {
 io.on('connection', (socket: Socket) => {
     const user = socket.data;
     socket.join(`user_${user.username}`); // should be safe to just use a username... should (since it requires token verification to access)
-    console.log(`User ${socket.id} subscribed to their own channel: user_${user.username}`);
 
     socket.on('disconnect', () => {
         console.log(`User Disconnected: ${socket.id}`);
@@ -64,5 +63,5 @@ io.on('connection', (socket: Socket) => {
 });
 
 server.listen(port, () => {
-    console.log(`Server running on http:localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });

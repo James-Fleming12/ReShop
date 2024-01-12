@@ -63,8 +63,8 @@ router.post("/send", async (req: Request, res: Response) => {
         console.log(`Database Server Error: ${e}`);
         return null;
     });
-    if (!sendto) return res.status(404).json({ message: "Server Error" });
-    if (sendto.blocked.includes(username)) return res.status(409).json({ messsage: "This user has blocked you" });
+    if (!senduser) return res.status(404).json({ message: "Server Error" });
+    if (senduser.blocked.includes(username)) return res.status(409).json({ messsage: "This user has blocked you" });
     // validating message
     const message = data.message;
     if (message.length > 500) return res.status(409).json({ message: "Messages must be under 500 characters" });
@@ -108,12 +108,17 @@ router.post("/send", async (req: Request, res: Response) => {
     });
     if (!created) return res.status(404).json({ message: "Server Error" });
     // websocket update
-    const wsupdate = await fetch(process.env.WS_SERVER + "/send", {
+    const wsupdate = await fetch(process.env.WS_URL + "/send", {
         method: "POST",
         mode: "cors",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             token: process.env.WS_SECRET,
             username: sendto,
+            from: username,
             message: message,
             images: urls,
         }),

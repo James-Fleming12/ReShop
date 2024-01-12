@@ -34,7 +34,7 @@ Necessary Installations to Run:
     - Client: API_URL
     - Server: DATABASE_URL, JWT_SECRET, WS_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
     - Socket: DATABASE_URL, JWT_SECRET, WS_SECRET (same as Server)
-4. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server
+4. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server, `nodemon index.ts` to start the socket server
     - The client comes with its own proxy server
     - The client interacts with the server separately (REST API)
 

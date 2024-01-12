@@ -53,6 +53,7 @@ router.get('/pfp/:username', async (req: Request, res: Response) => {
 router.post('/pfp/:username', async (req: FileRequest, res: Response) => {
     const file = req.files.image;
     const formData = await req.body;
+    
     if (!formData) return res.status(404).json({ message: "Invalid Form Response" });
     const token = formData.token;
     // check if its an image (either magic file signatures, mime types, or being lazy and checking name)
