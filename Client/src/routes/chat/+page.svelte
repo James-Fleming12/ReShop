@@ -15,7 +15,7 @@
 </form> 
 
 {#if !form}
-    {#if data.success}
+    {#if data.success && data.users && data.users.length > 1}
         {#each data.users as user}
         <div class="usercontain">
             <!-- svelte-ignore a11y-img-redundant-alt -->
@@ -23,12 +23,20 @@
             <p><a href={"/chat/" + user.username}>{user.username}</a></p>
         </div>
         {/each}
+    {:else if data.success}
+        <p>No Active Messages</p>
     {:else}
         <p class="warning">{data.message}</p>
     {/if}
 {:else}
-    {#if form.success}
-        <p>Search Results</p>
+    {#if form.success && form.users.length > 0}
+        {#each form.users as user}
+            <!-- svelte-ignore a11y-img-redundant-alt -->
+            <img src="{user.pfp}" alt="Profile Picture" width=100 height=100/>
+            <p><a href="{"/chat/" + user.username}">{user.username}</a></p>
+        {/each}
+    {:else if form.success}
+        <p>No Matching users</p>
     {:else}
         <p class="warning">{form.message}</p>
     {/if}

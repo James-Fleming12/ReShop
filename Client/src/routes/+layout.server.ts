@@ -36,6 +36,7 @@ export const load = (async ({ cookies: Cookies }) => {
                 ["/profile", "Profile"],
                 ["/listing", "Create Listing"],
                 ["/search", "Search Listings"],
+                ["/chat", "Messaging"]
             ],
             logged: logged,
         };

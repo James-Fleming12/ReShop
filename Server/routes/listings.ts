@@ -280,14 +280,15 @@ router.get('/get/:id', async (req: Request, res: Response) => {
     return res.status(200).json({ listing: post, urls: urls });
 });
 
-// returns all the posts for a given username (to be filtered and organized in the proxy servers)
+// returns the first 50 listings for a given username (to be filtered and organized in the proxy servers)
 // the only logic provided is the generated the presigned url for the first image of each post
 router.get('/getuser/:username', async (req: Request, res: Response) => {
     const username = req.params.username;
     let posts = await prisma.post.findMany({
         where: {
             madeBy: username,
-        }
+        },
+        take: 50
     }).catch((e) => {
         console.log(`Database Server Error: ${e}`);
         return null;

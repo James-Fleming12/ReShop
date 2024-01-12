@@ -8,10 +8,16 @@ interface messaged {
     pfp: string,
 }
 
+interface FileRequest extends Request { 
+    files: any; // solely for typescript linting
+}
+
 interface presignedUser {
     username: string,
     pfp: string,
 }
+
+const allowed_files = ['image/png', 'image/jpeg', 'image/jpg']; // check these later
 
 const prisma = new PrismaClient();
 
@@ -30,6 +36,81 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 
+// takes the token, sender username, send to username, message, and optionally any images
+router.post("/send", async (req: Request, res: Response) => {
+    const data = req.body;
+    // user validation
+    const token = data.token;
+    const username = data.username;
+    if (!token || !username) return res.status(409).json({ message: "Invalid Credentials" });
+    const user = await prisma.user.findUnique({
+        where:{
+            username: username,
+        }
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!user) return res.status(404).json({ message: "Server Error" });
+    if (jwt.decode(token, process.env.JWT_SECRET) !== user.tokenc) return res.status(409).json({ message: "Invalid Credentials"});
+    // second user validation
+    const sendto = data.send;
+    const senduser = await prisma.user.findUnique({
+        where: {
+            username: sendto
+        }
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!sendto) return res.status(404).json({ message: "Server Error" });
+    if (sendto.blocked.includes(username)) return res.status(409).json({ messsage: "This user has blocked you" });
+    // validating message
+    const message = data.message;
+    if (message.length > 500) return res.status(409).json({ message: "Messages must be under 500 characters" });
+    // file validation
+    const files = (req as FileRequest).files;
+    const urls: string[] = [];
+    if (files && [].concat(files).length > 0){
+        const fileKeys = Object.keys(files);
+        fileKeys.forEach((key) => {
+            const file = files[key];
+            if (!allowed_files.includes(file.mimetype)) return res.status(409).json({ message: "Invalid File Type" });
+        if (file.size > 2000000) return res.status(409).json({ message: `${file.name} is Too Large` });
+        });
+        const uploadFile = async(key: string, file: any) => {
+            const generated = username + "-" + key + "-" + Date.now().toString(); 
+            // again, there has to be a better way to do this
+            const response = await client.send(new PutObjectCommand({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: generated,
+                Body: file.data,
+            })).catch((e) => {
+                console.log(`AWS Server Error: ${e}`);
+                return null;
+            });
+            if (!response) return res.status(404).json({ message: "AWS Server Error" });
+            urls.push(generated);
+        };
+        const uploadsRes = await Promise.all(fileKeys.map((key) => uploadFile(key, files[key]))).catch(() => null);
+        console.log(uploadsRes); // only for testing purposes
+    }
+    const created = await prisma.message.create({
+        data: {
+            sender: username,
+            receiver: sendto,
+            message: message,
+            images: urls && urls.length > 0 ? urls : undefined,
+        },
+    }).catch((e) => {
+        console.log(`Database Server Error: ${e}`);
+        return null;
+    });
+    if (!created) return res.status(404).json({ message: "Server Error" });
+    return res.status(200).json({ sentmessage: created });
+});
+
+// for searching for users
 router.get("/search/:search", async (req: Request, res: Response) => {
     const changeToPresigned = async (user: presignedUser) => {
         const presigned = await getSignedUrl(client, new GetObjectCommand({
@@ -65,8 +146,7 @@ router.get("/search/:search", async (req: Request, res: Response) => {
     const updateAll = await Promise.all(users.map(changeToPresigned)).catch((e) => { // figure out crash testing for this
         console.log(`Server Error: ${e}`);
         return null;
-    })
-    console.log(users); // for testing purposes only
+    });
     if (updateAll === null) return res.status(404).json({ message: "AWS Server Error" });
     return res.status(200).json({ users: users });
 });

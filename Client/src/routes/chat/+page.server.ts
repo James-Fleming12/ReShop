@@ -20,7 +20,7 @@ export const load = (async ({ cookies: Cookies }) => {
             pfp: "",
         }],
     }
-    const response = await fetch(API_URL + "/chat/" + Cookies.get("username"), {
+    const response = await fetch(API_URL + "/chat/get/" + Cookies.get("username"), {
         method: "POST",
         mode: "cors",
         body: JSON.stringify({
@@ -50,13 +50,13 @@ export const actions = {
         }
         const form = await request.formData().catch(() => null);
         if (!form) { res.message = "Invalid Form" ; return res }
-        const response = await fetch(API_URL + "/search/" + form.get("search")).catch((e) => {
+        const response = await fetch(API_URL + "/chat/search/" + form.get("search")).catch((e) => {
             console.log(`Backend Server Error: ${e}`);
             return null;
         });
         if (!response) { res.message = "Server Error" ; return res }
         const data = await response.json().catch(() => null);
-        if (!data) { res.message = "No posts" ; return res }
+        if (!data) { res.message = "No users" ; return res }
         res.users = data.users;
         res.success = true;
         return res;
