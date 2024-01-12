@@ -8,7 +8,8 @@ Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
 
 Frontend: Svelte, SvelteKit, Vite, SCSS
-Backend: ExpressJS, NodeJS, Prisma, Pusher (Chat, Push Notifications)
+Backend: ExpressJS, NodeJS, Prisma
+WebSocket: SocketIO, ExpressJS, NodeJS, Prisma
 Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
@@ -68,7 +69,7 @@ Necessary Installations to Run:
     - New groups of routes are added to `routes` and mentioned/added to the main router in `startup/routes.ts`
 3. Database:
     - Any changes to the database schema are made in `schema.prisma`
-    - Migrated with `npx prisma migrate` and pushed with `npx prisma db push`
+    - Migrated with `npx prisma migrate` and pushed with `npx prisma db push` (`npx prisma db pull` can be used in the websocket to update schema)
 4. Mobile:
     - Yet to be developed
 

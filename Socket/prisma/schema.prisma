@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model message {
+  id       Int      @id @default(autoincrement())
+  sender   String
+  receiver String
+  message  String
+  images   String[]
+  seen     Boolean  @default(false)
+}
+
+model post {
+  id       Int      @id @default(autoincrement())
+  postId   String   @unique
+  madeBy   String
+  title    String
+  bio      String
+  value    Int
+  purchase Boolean  @default(false)
+  pictures String[]
+  created  DateTime @default(now())
+}
+
+model region {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  tokenc    String
+  channel   String
+  pfp       String   @default("defaultpfp")
+  posts     String[]
+  blocked   String[]
+  messagers String[]
+  name      String?
+  region    String?
+  bio       String?
+}

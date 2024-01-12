@@ -47,6 +47,7 @@ export const load = (async ({ params, cookies: Cookies }) => {
 
 export const actions =  {
     send: async ({ request, cookies: Cookies, params }) => {
+        console.log("called");
         const res = {
             message: "",
             success: false,
