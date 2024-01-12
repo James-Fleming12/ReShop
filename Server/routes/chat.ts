@@ -107,6 +107,21 @@ router.post("/send", async (req: Request, res: Response) => {
         return null;
     });
     if (!created) return res.status(404).json({ message: "Server Error" });
+    // websocket update
+    const wsupdate = await fetch(process.env.WS_SERVER + "/send", {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify({
+            token: process.env.WS_SECRET,
+            username: sendto,
+            message: message,
+            images: urls,
+        }),
+    }).catch((e) => {
+        console.log(`WebSocket Server Error: ${e}`);
+        return null;
+    });
+    if (!wsupdate) return res.status(404).json({ message: "Message Couldn't Be Sent Live" });
     return res.status(200).json({ sentmessage: created });
 });
 

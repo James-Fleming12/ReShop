@@ -2,7 +2,8 @@
 
 **Current Stack**:
 Microservice Oriented Architecture
-    - A microservice for the web client, the mobile client (and it's API), and the backend API (and the database)
+    - A microservice for the web client, the mobile client (and it's API), the backend API (and the database), and the websocket server
+    - Four are open ports (mobile client, the mobile API, web client, websocket) with two being private (backend API, database)
 Connections only need to be made between the proxy API and the clients (Users can't access the logic backend API)
 Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
@@ -24,14 +25,15 @@ Postgres -> Postgres and Redis (Caching Requests)
 
 Necessary Installations to Run:
 1. NodeJS (Runtime)
-    - Run `npm i` for each package.json (in client, in server)
+    - Run `npm i` for each package.json (in client, server, and socket)
 2. Postgres Database (connected to the Prisma client)
     - In a `.env` file that holds a variable `DATABASE_URL`
     - In the format of `postgresql://username:password@url:port/dbname?schema=public`
 3. Set up `.env` files
     - In both Client and Server
     - Client: API_URL
-    - Server: DATABASE_URL, JWT_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
+    - Server: DATABASE_URL, JWT_SECRET, WS_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
+    - Socket: DATABASE_URL, JWT_SECRET, WS_SECRET (same as Server)
 4. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server
     - The client comes with its own proxy server
     - The client interacts with the server separately (REST API)
@@ -40,9 +42,8 @@ Necessary Installations to Run:
 1. Implement use:enchance on every form (no reloads)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
 1. Messaging
-    - Finish up image support (in querying images, get presigned urls)
-    - Storing new messages in the database when sent
-    - Implement Pusher (live updates)
+    - Finish up WebSocket connection in client
+    - Test messaging
 2. Set limits for usernames and passwords (no spaces in usernames, capital in pass, etc.)
 2. Check if JWT-Token or Username is succeptable to XSS (document.cookie)
 2. Test Search Engine pages feature
