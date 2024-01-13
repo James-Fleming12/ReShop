@@ -30,8 +30,6 @@ app.get('/other', (req: Request, res: Response) => {
 Routes for
 - Users
     - Changing User Info (username, password)
-- Posts
-    - Responding to Posts
 */
 
 app.listen(port, () => {

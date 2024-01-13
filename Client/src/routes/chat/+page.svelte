@@ -12,7 +12,7 @@
     <p>Search For Users</p>
     <input type="text" id="search" name="search" required />
     <button type="submit">Search</button>
-</form> 
+</form>
 
 {#if !form}
     {#if data.success && data.users && data.users.length > 1}
