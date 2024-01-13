@@ -35,8 +35,9 @@ Necessary Installations to Run:
     - Server: DATABASE_URL, JWT_SECRET, WS_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
     - Socket: DATABASE_URL, JWT_SECRET, WS_SECRET (same as Server)
 4. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server, `nodemon index.ts` to start the socket server
-    - The client comes with its own proxy server
-    - The client interacts with the server separately (REST API)
+    - The client comes with its own proxy server (to interact with the backend server)
+5. `npx expo start` in mobile client, `nodemon index.ts` in mobile proxy
+    - App can be viewed through the "Expo Go" App
 
 ## TODO:
 1. Implement use:enchance on every form (no reloads)
