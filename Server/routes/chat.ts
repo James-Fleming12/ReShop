@@ -126,6 +126,9 @@ router.post("/send", async (req: Request, res: Response) => {
         console.log(`WebSocket Server Error: ${e}`);
         return null;
     });
+
+    // update both user's messaging lists
+
     if (!wsupdate) return res.status(404).json({ message: "Message Couldn't Be Sent Live" });
     return res.status(200).json({ sentmessage: created });
 });
