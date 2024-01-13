@@ -126,9 +126,35 @@ router.post("/send", async (req: Request, res: Response) => {
         console.log(`WebSocket Server Error: ${e}`);
         return null;
     });
-
     // update both user's messaging lists
-
+    let user1list = user.messagers;
+    let user2list = senduser.messagers;
+    if (!user1list.includes(sendto)){
+        user1list.unshift(sendto);
+        const updated = await prisma.user.update({
+            where: { username: username },
+            data: {
+                messagers: user1list,
+            }
+        }).catch((e) => {
+            console.log(`Database Server Error: ${e}`);
+            return null;
+        });
+        if (!updated) return res.status(404).json({ message: "Server Error" });
+    }
+    if (!user2list.includes(username)){
+        user2list.unshift(username);
+        const updated = await prisma.user.update({
+            where: { username: sendto },
+            data: {
+                messagers: user2list,
+            }
+        }).catch((e) => {
+            console.log(`Database Server Error: ${e}`);
+            return null;
+        });
+        if (!updated) return res.status(404).json({ message: "Server Error" });
+    }
     if (!wsupdate) return res.status(404).json({ message: "Message Couldn't Be Sent Live" });
     return res.status(200).json({ sentmessage: created });
 });

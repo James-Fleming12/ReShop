@@ -42,7 +42,7 @@ Necessary Installations to Run:
 1. Implement use:enchance on every form (no reloads)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
 1. Messaging
-    - Update Messaging list for each user (most recent messages are first, just update the most recent interact each time to be first in the list)
+    - Figure out sorting messenger list by most recent message (either updating list each time or sorting by last message time when queried)
 2. Set limits for usernames and passwords (no spaces in usernames, capital in pass, etc.)
 2. Check if JWT-Token or Username is succeptable to XSS (document.cookie)
 2. Test Search Engine pages feature
