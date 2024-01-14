@@ -247,7 +247,7 @@ router.post("/get/:username", async (req: Request, res: Response) => {
             return null;
         });
         if (!adduser) return res.status(404).json({ message: "Internal Server Error" });
-        const presigned = await getSignedUrl(client, new GetObjectCommand({ 
+        const presigned = await getSignedUrl(client, new GetObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: adduser.pfp,
         }), { expiresIn: 2000 }).catch((e) => {
