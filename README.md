@@ -14,7 +14,7 @@ WebSocket: SocketIO, ExpressJS, NodeJS, Prisma
 Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
-Mobile: ReactNative, ExpressJS (Proxy Server)
+Mobile: Expo, ReactNative, ExpressJS (Proxy Server)
 
 **After Prototype**:
 Frontend -> Check if Astro is set to support SPAs yet
