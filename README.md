@@ -9,7 +9,7 @@ Allows each service to be scaled appropriately
     - If there are more requests the mobile proxy can be scaled, etc.
 
 Frontend: Svelte, SvelteKit, Vite, SCSS
-Backend: ExpressJS, NodeJS, Prisma
+Backend: ExpressJS, NodeJS, Prisma, Algolia (AI Search)
 WebSocket: SocketIO, ExpressJS, NodeJS, Prisma
 Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)

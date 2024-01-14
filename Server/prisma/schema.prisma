@@ -16,7 +16,7 @@ model user{
   id        Int     @id @default(autoincrement())
   email     String  @unique
   username  String  @unique 
-  password  String  
+  password  String
   tokenc    String  // Used to generate tokens so that users can nullify their cookies (log everyone out)
   channel   String
   pfp       String  @default("defaultpfp") // link to the profile picture saved in S3
