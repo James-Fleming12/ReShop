@@ -40,6 +40,7 @@ Necessary Installations to Run:
     - App can be viewed through the "Expo Go" App
 
 ## TODO:
+1. Algolia Search (indexing listings, and maybe users for reccomendations)
 1. Implement use:enchance on every form (no reloads)
 1. Finish up Password, Username changes, and Token changes (removing the token off the user if invalid)
 1. Messaging
