@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import type { PageData } from "./$types";
     export let data: PageData;
-    onMount( () => { 
+    onMount(() => { 
         if (!data.success) goto("/") 
     });
 </script>
@@ -21,7 +21,7 @@
     <p>Listing by <a href={"/profile/" + data.listing.madeBy}>{data.listing.madeBy}</a></p>
     {#each data.pictures as source}
         <!-- svelte-ignore a11y-img-redundant-alt -->
-        <img src={source} alt="Picture" width=100 height=100/>
+        <img src={source} alt="Picture" width=100 height=100 />
     {/each}
     <p>Posted on: {data.listing.created}</p>
 {/if}

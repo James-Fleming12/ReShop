@@ -56,7 +56,7 @@
     {/if}
 {/if}
 
-{#if data.posts && data.posts.length > 1}
+{#if data.posts && data.posts.length > 0}
     <h1>Current Listings</h1>
 {:else}
     <p>No Listings To Show <a href="/listing">Create One</a></p>

@@ -21,7 +21,14 @@
     <input type="password" id="password" name="password" placeholder="Password..." required/>
     <button type="submit">Submit</button>
     {#if form}
-        <p>{form.message}</p>
+        <p class="warning">{form.message}</p>
     {/if}
 </form>
+
 <p>Don't have an account? <a href="/auth/register">Regsiter</a></p>
+
+<style lang="scss">
+    .warning{
+        color: red;
+    }
+</style>

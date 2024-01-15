@@ -8,7 +8,7 @@ export const load = (async ({ cookies: Cookies }) => {
     const check = Cookies.get("username");
     if(token && check){
         logged = true;
-    } else if (token){
+    }else if (token){
         const response = await fetch(API_URL + "/validate", {
             method: "POST",
             mode: "cors",
@@ -21,7 +21,10 @@ export const load = (async ({ cookies: Cookies }) => {
             }),
         }).catch(() => null);
         if (response && response.ok){
-            const data = await response.json().catch(() => null);
+            const data = await response.json().catch((e) => {
+                console.log(`Server Error: ${e}`);
+                return null;
+            });
             Cookies.set("username", data.user, { path: "/" });
             logged = true;
         }else{

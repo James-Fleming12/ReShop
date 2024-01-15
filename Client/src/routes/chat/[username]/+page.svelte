@@ -30,7 +30,6 @@
             console.log(`Connection Error: ${error}`);
         });
         socket.on("message", (messageData: MessageEventData) => {
-            console.log("called");
             const { message, images, user } = messageData;
             if (!message || !user) console.log("Server Error");
             if (user === data.other) data.messages = [...data.messages, { message: message, sender: user, images: images ? images : [] } ];

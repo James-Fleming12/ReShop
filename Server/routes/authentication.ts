@@ -53,8 +53,8 @@ router.post('/register', async (req: Request, res: Response) => {
             OR: [
                 { username: username },
                 { email: email },
-            ]
-        }
+            ],
+        },
     });
 
     if (check) return res.status(409).json({ message: "User credentials already used" });
