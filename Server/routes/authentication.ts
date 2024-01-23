@@ -83,7 +83,10 @@ router.post('/register', async (req: Request, res: Response) => {
     }
     valid = false;
 
-    if (channel.length < 1 || tokeng.length < 1) return res.status(404).json({ message: "Server Error" });
+    if (channel.length < 1 || tokeng.length < 1) {
+        console.log(`Code's Wrong`);
+        return res.status(404).json({ message: "Server Error" });
+    }
     
     const created = await prisma.user.create({
         data: {
