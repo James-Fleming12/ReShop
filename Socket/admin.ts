@@ -19,15 +19,18 @@ router.post("/user", async (req: Request, res: Response) => {
     const takes = data.take;
     const search = data.search;
     if (!takes || !search) return res.status(409).json({ message: "Invalid Information" });
-    
+    if (search.length < 1  || search.length > 100) return res.status(409).json({ message: "Invalid Search Length" });
+
 });
 
 router.post("/listing", async (req: Request, res: Response) => {
     const data = await req.body;
+
 });
 
 router.post("/message", async (req: Request, res: Response) => {
     const data = await req.body;
+
 });
 
 module.exports = router;
