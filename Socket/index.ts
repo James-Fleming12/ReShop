@@ -15,9 +15,11 @@ const io = socketIO(server);
 const prisma = new PrismaClient();
 
 const port = process.env.PORT || 3000;
+const adminrouter = require('admin.ts');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use("/admin", adminrouter);
 
 app.post('/send', (req: Request, res: Response) => { 
     const data = req.body;
