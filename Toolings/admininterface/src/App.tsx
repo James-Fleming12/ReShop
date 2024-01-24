@@ -7,7 +7,7 @@ const App: Component = () => {
   return (
     <>
       <h1>Admin Panel</h1>
-      <Listing />
+      <Listing name="Listing1"/>
     </>
   );
 };

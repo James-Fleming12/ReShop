@@ -1,10 +1,14 @@
-import type { Component } from 'solid-js';
-
 import "./Listing.css";
 
-const Listing: Component = () => {
+interface ListProps {
+    name: string;
+}
+
+const Listing = (props: ListProps) => {
     return (
-        <h1>Listing</h1>
+        <div class="container">  
+            <h1>Listing {props.name}</h1>
+        </div>
     );
 };
 
