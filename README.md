@@ -15,6 +15,7 @@ Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
 Mobile: Expo, ReactNative, ExpressJS (Proxy Server)
+Toolings: SolidJS, Electron, Go (CLI)
 
 **After Prototype**:
 Backend API -> Either Bun, Hono, Prisma or Gin, GORM
@@ -73,6 +74,9 @@ Necessary Installations to Run:
     - Migrated with `npx prisma migrate` and pushed with `npx prisma db push` (`npx prisma db pull` can be used in the websocket to update schema)
 4. Mobile:
     - Yet to be developed
+5. Admin Interface:
+    - The Solid server (`npm start`) needs to be ran, then the electron app (`npm run electron`) can be started
+    - Once in production Electron Forge will bundle it all together into one app
 
 ## Testing:
 1. Cypress (End to End, contained in Client):
