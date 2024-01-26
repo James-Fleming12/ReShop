@@ -1,22 +1,24 @@
 {
-  "name": "vite-template-solid",
+  "name": "tauri-app",
   "version": "0.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
-    "start": "vite && electron .",
-    "electron": "electron ."
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "tauri": "tauri"
   },
-  "main": "main.js",
-  "author": "",
   "license": "MIT",
-  "devDependencies": {
-    "electron": "^28.1.4",
-    "solid-devtools": "^0.29.2",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.11",
-    "vite-plugin-solid": "^2.8.2"
-  },
   "dependencies": {
-    "solid-js": "^1.8.11"
+    "solid-js": "^1.7.8",
+    "@tauri-apps/api": "^1.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^5.0.0",
+    "vite-plugin-solid": "^2.8.0",
+    "@tauri-apps/cli": "^1.5.8"
   }
 }

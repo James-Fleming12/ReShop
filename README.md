@@ -15,7 +15,7 @@ Database: PostgresQL, AWS S3 (Images)
 Testing: Jest (Unit), Cypress (End to End)
 Prodcution: Kubernetes, Consul
 Mobile: Expo, ReactNative, ExpressJS (Proxy Server)
-Toolings: SolidJS, Electron, Go (CLI)
+Toolings: SolidJS, Tauri, Rust (Admin Panel), Go (CLI)
 
 **After Prototype**:
 Backend API -> Either Bun, Hono, Prisma or Gin, GORM

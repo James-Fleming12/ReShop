@@ -1,36 +1,34 @@
-import { createSignal, type Component, Show } from 'solid-js';
+import { createSignal } from "solid-js";
+import { invoke } from "@tauri-apps/api/tauri";
+import "./App.css";
 
-import styles from './App.module.css';
-import Listing from './Components/Listing';
+function App() {
+  const [greetMsg, setGreetMsg] = createSignal("");
+  const [name, setName] = createSignal("");
 
-const App: Component = () => {
-  const [value, setValue] = createSignal("");
-
-  const checkInfo = (e: Event) => {
-    e.preventDefault();
-    const form = e.target;
-    if (!e.target) return;
-    // const formData = new FormData(e.);
+  async function greet() {
+    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+    setGreetMsg(await invoke("greet", { name: name() }));
   }
 
   return (
-    <>
-      <Show 
-        when={value() !== ""}
-        fallback={
-          <form onSubmit={checkInfo}>
-            <label>
-              Password
-              <input type="text" name="passw"/>
-            </label>
-          </form>
-        }
+    <div class="container">
+      <form
+        class="row"
+        onSubmit={(e) => {
+          e.preventDefault();
+          greet();
+        }}
       >
-        <h1>Admin Panel</h1>
-        <Listing name=""/>
-      </Show>
-    </>
+        <input
+          id="greet-input"
+          onChange={(e) => setName(e.currentTarget.value)}
+          placeholder="Enter a name..."
+        />
+        <button type="submit">Greet</button>
+      </form>
+    </div>
   );
-};
+}
 
 export default App;
