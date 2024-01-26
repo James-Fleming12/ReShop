@@ -7,9 +7,11 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::comand]
-fn validate(name: &str) -> Boolean {
-    // blah 
+#[tauri::command]
+fn validate(passw: &str) -> bool {
+    // fetch request
+    
+    return false;
 }
 
 fn main() {

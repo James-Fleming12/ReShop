@@ -75,8 +75,7 @@ Necessary Installations to Run:
 4. Mobile:
     - Yet to be developed
 5. Admin Interface:
-    - The Solid server (`npm start`) needs to be ran, then the electron app (`npm run electron`) can be started
-    - Once in production Electron Forge will bundle it all together into one app
+    - Ran with `npm run tauri dev` (only for development, is ran with the executable once in production)
 
 ## Testing:
 1. Cypress (End to End, contained in Client):

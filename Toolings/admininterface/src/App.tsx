@@ -1,33 +1,58 @@
-import { createSignal } from "solid-js";
+import { For, Show, createSignal } from "solid-js";
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
 
 function App() {
-  const [greetMsg, setGreetMsg] = createSignal("");
-  const [name, setName] = createSignal("");
+  const [curr, setCurr] = createSignal("");
+  const [passw, setPass] = createSignal("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name: name() }));
+  const [currS, setCurrS] = createSignal("");
+  const [search, setSearch] = createSignal([]);
+
+  async function validate() {
+    // extra
+    if (await invoke("validate", { name: curr() })) {
+      setPass(curr());
+    }else{
+
+    }
   }
 
   return (
-    <div class="container">
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
+    <Show
+      when={passw() !== ""}
+      fallback={
+        <div class="container">
+          <form
+            class="row"
+            onSubmit={(e) => {
+              e.preventDefault();
+              validate();
+            }}
+          >
+            <input
+              id="greet-input"
+              onChange={(e) => setCurr(e.currentTarget.value)}
+              placeholder="Enter a name..."
+            />
+            <button type="submit">Greet</button>
+          </form>
+        </div>
+      }
+    >
+      <h1>Admin Panel</h1>
+      <form>
+        <input 
+          type="text"
+          onChange={(e) => setCurrS(e.currentTarget.value)}
+          placeholder="Search..."
         />
-        <button type="submit">Greet</button>
+        <button type="submit">Submit</button>
       </form>
-    </div>
+      <For each={search()}>
+        {(item, index) => <h1>Listing</h1>}
+      </For>
+    </Show>
   );
 }
 
