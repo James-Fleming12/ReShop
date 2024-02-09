@@ -31,7 +31,7 @@ Necessary Installations to Run:
     - In the format of `postgresql://username:password@url:port/dbname?schema=public`
 3. Set up `.env` files
     - In both Client and Server
-    - Client: API_URL
+    - Client: API_URL, WS_URL, SITE_URL
     - Server: DATABASE_URL, JWT_SECRET, WS_SECRET, AWS_ACCESS, AWS_SECRET, AWS_REGION, AWS_BUCKET_NAME
     - Socket: DATABASE_URL, JWT_SECRET, WS_SECRET (same as Server)
 4. `npm run dev` to start the client server, `nodemon index.ts` to start the backend server, `nodemon index.ts` to start the socket server

@@ -1,4 +1,4 @@
-const TEST_URL = "http:/localhost:5173";
+const TEST_URL = process.env.SITE_URL;
 
 describe('Webpage is Up', () => {
   it('finds homepage', () => {

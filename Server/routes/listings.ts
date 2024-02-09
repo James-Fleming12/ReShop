@@ -100,7 +100,8 @@ router.post('/search', async (req: Request, res: Response) => {
         }else{
             return res.status(409).json({ message: "No Listings Match" });
         }
-    }    for (let post of posts){
+    }    
+    for (let post of posts){
         const urls = post.pictures;
         if (!urls || urls.length < 1) return res.status(409).json({ message: "Invalid Picture Information for Listing" });
         const presigned = await getSignedUrl(client, new GetObjectCommand({ 
