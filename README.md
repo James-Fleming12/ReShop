@@ -85,5 +85,5 @@ Necessary Installations to Run:
     - `npm jest` will run all test cases (defined in `tests`)
 
 ## Precautions before Production:
-1. Clear the AWS S3 Bucket (of everything except for `defaultpfp`)
+1. Clear the AWS S3 Bucket (of everything except for `defaultpfp` which is necessary)
     - Since the database often had to reset during development, the bucket might have unused images (a little dangerous)
