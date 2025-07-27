@@ -1,3 +1,5 @@
+The codebase and README for a trade and commerce platform startup.
+
 ## Server Setup:
 
 **Current Stack**:
